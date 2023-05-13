@@ -35,7 +35,7 @@ class MondoClass():
 
     def RimuoviBlocco(self,posMondox,posMondoy,Blocco):
         posizy=posMondoy
-        with open("Mondo.txt","r+",encoding="utf-8") as f:
+        with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
             tutto=[]
             for riga in f:
                 tutto.append(riga)
@@ -54,11 +54,11 @@ class MondoClass():
 
         f.close()
 
-        with open("Mondo.txt","r+",encoding="utf-8") as f:
+        with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
             f.truncate()
         
 
-        f1 = open("Mondo.txt","a",encoding="utf-8")
+        f1 = open("FileTXT/Mondo.txt","a",encoding="utf-8")
         
         for riga in tmp:
             riga=riga.strip('[]",')
@@ -73,7 +73,7 @@ class MondoClass():
 
     def AggiungiBlocco(self,posMondox,posMondoy,BloccoAria,lum):
         posizy=posMondoy
-        with open("Mondo.txt","r+",encoding="utf-8") as f:
+        with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
             tutto=[]
             for riga in f:
                 tutto.append(riga)
@@ -102,11 +102,11 @@ class MondoClass():
 
         f.close()
 
-        with open("Mondo.txt","r+",encoding="utf-8") as f:
+        with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
             f.truncate()
         
 
-        f1 = open("Mondo.txt","a",encoding="utf-8")
+        f1 = open("FileTXT/Mondo.txt","a",encoding="utf-8")
         
         for riga in tmp:
             riga=riga.strip('[]",')
@@ -121,7 +121,7 @@ class MondoClass():
 
     def draw(self,posMondox,posMondoy):
         posizy=posMondoy
-        with open("Mondo.txt","r",encoding="utf-8") as f:
+        with open("FileTXT/Mondo.txt","r",encoding="utf-8") as f:
             for riga in f:
                 posizy=posizy+50
                 posizx=posMondox
