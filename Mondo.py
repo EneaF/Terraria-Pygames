@@ -2,10 +2,14 @@ import pygame
 from pygame.locals import *
 
 class MondoClass():
-    def __init__(self,pos,size,screen):
+    def __init__(self,pos,size,screen,posMondo):
         self.screen=screen
 
         self.mondoRect=pygame.Rect((pos[0],pos[1]),(size[0],size[1]))
+
+
+        self.posMondox=posMondo[0]
+        self.posMondoy=posMondo[1]
 
         self.sizeBlocco=(50,50)
 
@@ -21,13 +25,19 @@ class MondoClass():
         self.erba = pygame.transform.scale(self.erba,self.sizeBlocco)
         self.terra = pygame.transform.scale(self.terra,self.sizeBlocco)
         self.blocchi=[]
-    
-    def draw(self):
-        posizy=-50
+
+    def ScorrimentoDestra(self,scorrix,scorriy):
+        self.posMondox=-45
+        self.posMondoy=-50
+        self.blocchi=[]
+
+
+    def draw(self,posMondox,posMondoy):
+        posizy=posMondoy
         with open("Mondo.txt","r",encoding="utf-8") as f:
             for riga in f:
                 posizy=posizy+50
-                posizx=-50
+                posizx=posMondox
                 riga=riga.split()
                 for el in riga:
                     el = int(el)
@@ -36,24 +46,34 @@ class MondoClass():
                         pass
                     elif el==1:
                         self.screen.blit(self.erba,((posizx,posizy),(self.sizeBlocco)))
-                        if (posizx,posizy) not in self.blocchi:
-                            self.blocchi.append((posizx,posizy))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy))
                     elif el==2:
                         self.screen.blit(self.terra,((posizx,posizy),(self.sizeBlocco)))
-                        if (posizx,posizy) not in self.blocchi:
-                            self.blocchi.append((posizx,posizy))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy))
                     elif el==3:
                         self.screen.blit(self.pietra,((posizx,posizy),(self.sizeBlocco)))
-                        if (posizx,posizy) not in self.blocchi:
-                            self.blocchi.append((posizx,posizy))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy))
                     elif el==4:
                         self.screen.blit(self.foglia,((posizx,posizy),(self.sizeBlocco)))
-                        if (posizx,posizy) not in self.blocchi:
-                            self.blocchi.append((posizx,posizy))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy))
                     elif el==5:
                         self.screen.blit(self.legno,((posizx,posizy),(self.sizeBlocco)))
-                        if (posizx,posizy) not in self.blocchi:
-                            self.blocchi.append((posizx,posizy))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy))
+                    elif el==9:
+                        # self.screen.blit(self.legno,((posizx,posizy),(self.sizeBlocco)))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy))
             
 
                 

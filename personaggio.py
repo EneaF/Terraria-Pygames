@@ -16,7 +16,7 @@ class Personaggio():
 
         self.vel=[0,0]
         self.gravita = 0.3
-        self.forzaSalto = 15
+        self.forzaSalto = 10
         self.VelMovimento = 5
         
 
