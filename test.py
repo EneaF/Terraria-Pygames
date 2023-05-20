@@ -1,23 +1,16 @@
-s1="0 1 2 3 4 5 6 7 8 9"
-s3="0 1 2 3 4 5 6 7 8 9"
-s4="0 1 2 3 4 5 6 7 8 9"
-s1=s1.strip().split()
-s3=s3.strip().split()
-s4=s4.strip().split()
-s1[4]="7"
-s2=[]
-s2.append(s1)
-s2.append(s3)
-s2.append(s4)
+import pygame
+from pygame.locals import *
+pygame.init()
 
+pygame.mixer.music.load("Sounds/MainMusic.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play()
+danno=pygame.mixer.Sound("Sounds/Damage.mp3")
 
-
-fi = open("test.txt","w")
-for el in s2:
-    el=str(el)
-    el=el.strip("[']")
-    el=el.replace("', '"," ")
-    print(el)
-    fi.write(el)
-    fi.write("\n")
-# s5="".join(s2)
+r=True
+while r:
+    x=input("ciao")
+    if x=="1":
+        pygame.mixer.music.fadeout(1000)
+        pygame.mixer.music.load("Sounds/MenuMusic.mp3")
+        pygame.mixer.music.play(0,1)

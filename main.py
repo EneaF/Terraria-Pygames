@@ -5,6 +5,7 @@ from personaggio import Personaggio
 from Mondo import MondoClass
 from Inventario_Rapido import Inventario
 from Riquadri import RiqScritto
+from HP import VitaClass
 
 pygame.init()
 
@@ -35,8 +36,17 @@ Reset3L=RiqScritto(screen, (800,450), sizeReset, "Map L")
 
 QUITButton=RiqScritto(screen, (400,575), (200,100), "QUIT")
 
-
-
+vita=[]
+vitaTmp=[VitaClass((120,30),(25,25),screen),0]
+vita.append(vitaTmp)
+vitaTmp=[VitaClass((150,30),(25,25),screen),0]
+vita.append(vitaTmp)
+vitaTmp=[VitaClass((180,30),(25,25),screen),0]
+vita.append(vitaTmp)
+vitaTmp=[VitaClass((210,30),(25,25),screen),0]
+vita.append(vitaTmp)
+vitaTmp=[VitaClass((240,30),(25,25),screen),0]
+vita.append(vitaTmp)
 
 clock = pygame.time.Clock()
 fps = 60
@@ -74,6 +84,8 @@ def collisioneBlocchiSopra(player,Mondo):
             noCol=False
     if noCol:
         player.inAria=True
+    else:
+        return True
 
 def collisioneBlocchiLati(player,Mondo,mode=1):
     for posBlocco in Mondo.blocchi:
@@ -232,6 +244,32 @@ def SalvaDati(dati,saveFile,nomeMondo):
         f.write("\n")
     f.close()
 
+def dannoDaCaduta(player):
+
+    danno=0
+    if player.velMax>=20.1:
+        danno=10
+    elif player.velMax>=19.2:
+        danno=9
+    elif player.velMax>=18.3:
+        danno=8
+    elif player.velMax>=17.4:
+        danno=7
+    elif player.velMax>=16.5:
+        danno=6
+    elif player.velMax>=15.9:
+        danno=5
+    elif player.velMax>=15:
+        danno=4
+    elif player.velMax>=13.7:
+        danno=3
+    elif player.velMax>=12.8:
+        danno=2
+    elif player.velMax>=11.8:
+        danno=1
+    
+    return danno
+        
 
 # nFoglie=0
 # nLegno=0
@@ -245,8 +283,23 @@ lum=0
 # posMondox=-550
 # posMondoy=-250
 fase=1
+
+pygame.mixer.music.load("Sounds/MenuMusic.mp3")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
+dannoSuono=pygame.mixer.Sound("Sounds/Damage.mp3")
+LegnoSuono=pygame.mixer.Sound("Sounds/WoodBreak.mp3")
+ErbaSuono=pygame.mixer.Sound("Sounds/GrassBreak.mp3")
+FoglieSuono=pygame.mixer.Sound("Sounds/foglie.mp3")
+TerraSuono=pygame.mixer.Sound("Sounds/DirtBreak.mp3")
+PietraSuono=pygame.mixer.Sound("Sounds/StoneBreak.mp3")
+
+
+vitaTot=10
+regen=0
 while True:
     if fase==1:
+        
         screen.blit(sfondoMenu,sfondorect)
         DisegnaMenu()
 
@@ -315,11 +368,19 @@ while True:
             posMondox=dati[5]
             posMondoy=dati[6]
             posPlayer=(dati[7],dati[8])
+            vitaTot=dati[9]
             player=Personaggio(screen, posPlayer,(45,90))
             fase=2
 
+            pygame.mixer.music.fadeout(1000)
+            pygame.mixer.music.load("Sounds/MainMusic.mp3")
+            pygame.mixer.music.set_volume(0.3)
+            pygame.mixer.music.play(-1,1)
+
     elif fase==2:
-        collisioneBlocchiSopra(player, Mondo)
+        caduto=False
+        danno=0
+        caduto=collisioneBlocchiSopra(player, Mondo)
         collisioneBlocchiSotto(player, Mondo)
         
         for event in pygame.event.get():
@@ -335,18 +396,23 @@ while True:
                         if rectTmp.collidepoint(pos):
                             if blocco[2]==1 and nErba<999:
                                 nErba+=1
+                                ErbaSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                             elif blocco[2]==2 and nTerra<999:
                                 nTerra+=1
+                                TerraSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                             elif blocco[2]==3 and nPietra<999:
                                 nPietra+=1
+                                PietraSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                             elif blocco[2]==4 and nFoglie<999:
                                 nFoglie+=1
+                                FoglieSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                             elif blocco[2]==5 and nLegno<999:
                                 nLegno+=1
+                                LegnoSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
             if event.type == MOUSEBUTTONDOWN and event.button==3:
@@ -357,18 +423,23 @@ while True:
                         if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
                             if lum==1 and nFoglie>0:
                                 nFoglie-=1
+                                FoglieSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==2 and nLegno>0:
                                 nLegno-=1
+                                LegnoSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==3 and nPietra>0:
                                 nPietra-=1
+                                PietraSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==4 and nErba>0:
                                 nErba-=1
+                                ErbaSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==5 and nTerra>0:
                                 nTerra-=1
+                                TerraSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                         
                             
@@ -418,9 +489,15 @@ while True:
             dati.append(nTerra)
             dati.append(posMondox)
             dati.append(posMondoy)
-            dati.append(player.rect.right)
+            dati.append(player.rect.left)
             dati.append(player.rect.top)
+            dati.append(vitaTot)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
+
+            pygame.mixer.music.fadeout(1000)
+            pygame.mixer.music.load("Sounds/MenuMusic.mp3")
+            pygame.mixer.music.set_volume(0.3)
+            pygame.mixer.music.play(-1,1)
 
         screen.blit(sfondoGioco,sfondorect)
         
@@ -434,6 +511,31 @@ while True:
         box3.draw(3,nPietra)
         box4.draw(4,nErba)
         box5.draw(5,nTerra)
+
+        player.calcolaVelMax()
+        if caduto==True and player.velMax>=11.8:
+            danno+=dannoDaCaduta(player)
+            player.velMax=0
+            dannoSuono.play()
+        if regen >= 500 and vitaTot != 10:
+            vitaTot+=1
+            regen = 0
+        vitaTot-=danno
+        vitaTmp=vitaTot
+        for i in range(len(vita)):
+            if vitaTmp==1:
+                vita[i][1]=1
+                vitaTmp-=1
+            elif vitaTmp>=2:
+                vita[i][1]=0
+                vitaTmp-=2
+            else:
+                vita[i][1]=2
+        regen+=1        
+            
+        
+        for cuore in vita:
+            cuore[0].draw(cuore[1])
 
         if lum==1:
             box1.draw(1,nFoglie,True)
