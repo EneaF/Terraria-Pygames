@@ -1,4 +1,4 @@
-import pygame, sys, math
+import pygame, sys, math,random
 from math import sqrt
 from pygame.locals import *
 from personaggio import Personaggio
@@ -286,8 +286,23 @@ lum=0
 # posMondoy=-250
 fase=1
 
-pygame.mixer.music.load("Sounds/MenuMusic.mp3")
-pygame.mixer.music.set_volume(0.3)
+Soundtrack=["Sounds/MainTheme/Soundtrack (1).mp3","Sounds/MainTheme/Soundtrack (2).mp3",
+            "Sounds/MainTheme/Soundtrack (3).mp3","Sounds/MainTheme/Soundtrack (4).mp3",
+            "Sounds/MainTheme/Soundtrack (5).mp3","Sounds/MainTheme/Soundtrack (6).mp3",
+            "Sounds/MainTheme/Soundtrack (7).mp3","Sounds/MainTheme/Soundtrack (8).mp3",
+            "Sounds/MainTheme/Soundtrack (9).mp3","Sounds/MainTheme/Soundtrack (10).mp3",
+            "Sounds/MainTheme/Soundtrack (11).mp3","Sounds/MainTheme/Soundtrack (12).mp3",
+            "Sounds/MainTheme/Soundtrack (13).mp3","Sounds/MainTheme/Soundtrack (14).mp3",
+            "Sounds/MainTheme/Soundtrack (15).mp3","Sounds/MainTheme/Soundtrack (16).mp3",
+            "Sounds/MainTheme/Soundtrack (17).mp3","Sounds/MainTheme/Soundtrack (18).mp3",
+            "Sounds/MainTheme/Soundtrack (19).mp3","Sounds/MainTheme/Soundtrack (20).mp3",
+            "Sounds/MainTheme/Soundtrack (21).mp3","Sounds/MainTheme/Soundtrack (22).mp3",
+            "Sounds/MainTheme/Soundtrack (23).mp3","Sounds/MainTheme/Soundtrack (24).mp3",
+            "Sounds/MainTheme/Soundtrack (25).mp3","Sounds/MainTheme/Soundtrack (26).mp3",]
+
+
+pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
+pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 dannoSuono=pygame.mixer.Sound("Sounds/Damage.mp3")
 LegnoSuono=pygame.mixer.Sound("Sounds/WoodBreak.mp3")
@@ -376,11 +391,16 @@ while True:
             regen=0
 
             pygame.mixer.music.fadeout(1000)
-            pygame.mixer.music.load("Sounds/MainMusic.mp3")
-            pygame.mixer.music.set_volume(0.3)
-            pygame.mixer.music.play(-1,1)
+            pygame.mixer.music.load(random.choice(Soundtrack))
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(0,1)
 
     elif fase==2:
+        if pygame.mixer.music.get_busy()==False:
+            pygame.mixer.music.unload()
+            pygame.mixer.music.load(random.choice(Soundtrack))
+            pygame.mixer.music.set_volume(0.3)
+            pygame.mixer.music.play(0,1)
         caduto=False
         danno=0
         caduto=collisioneBlocchiSopra(player, Mondo)
@@ -501,8 +521,8 @@ while True:
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
 
             pygame.mixer.music.fadeout(1000)
-            pygame.mixer.music.load("Sounds/MenuMusic.mp3")
-            pygame.mixer.music.set_volume(0.3)
+            pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
+            pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(-1,1)
 
         screen.blit(sfondoGioco,sfondorect)
