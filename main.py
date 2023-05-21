@@ -115,6 +115,7 @@ def scorriMondolati(player,Mondo,posMondox):
             posMondox=posMondox+player.VelMovimento
         posMondox=posMondox-player.VelMovimento
         player.StopDestra()
+        player.nextDestra()
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
     if player.rect.left<=200 and player.muoviSinistra==True:
@@ -122,6 +123,7 @@ def scorriMondolati(player,Mondo,posMondox):
             posMondox=posMondox-player.VelMovimento
         posMondox=posMondox+player.VelMovimento
         player.StopSinistra()
+        player.nextSinistra()
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
     return posMondox
@@ -371,6 +373,7 @@ while True:
             vitaTot=dati[9]
             player=Personaggio(screen, posPlayer,(45,90))
             fase=2
+            regen=0
 
             pygame.mixer.music.fadeout(1000)
             pygame.mixer.music.load("Sounds/MainMusic.mp3")
@@ -455,6 +458,9 @@ while True:
             player.muovi_Sinistra()
         else:
             player.StopSinistra()
+        
+        if keys[K_a]==False and keys[K_d]==False and player.inAria==False:
+            player.stopAll()
 
         if keys[K_SPACE]:
             player.Salto()
@@ -517,10 +523,13 @@ while True:
             danno+=dannoDaCaduta(player)
             player.velMax=0
             dannoSuono.play()
-        if regen >= 500 and vitaTot != 10:
+        if regen >= 300 and vitaTot < 10:
             vitaTot+=1
             regen = 0
+        
         vitaTot-=danno
+        if vitaTot<0:
+            vitaTot=0
         vitaTmp=vitaTot
         for i in range(len(vita)):
             if vitaTmp==1:
@@ -531,8 +540,8 @@ while True:
                 vitaTmp-=2
             else:
                 vita[i][1]=2
-        regen+=1        
-            
+        if vitaTot<10:
+            regen+=1
         
         for cuore in vita:
             cuore[0].draw(cuore[1])
