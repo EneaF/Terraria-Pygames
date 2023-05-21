@@ -29,10 +29,10 @@ class SfondoClass():
 
     
     def draw(self,time,posMondoy):
-        if posMondoy>=-750 and posMondoy<=-50:
-            diffY=-50
+        if posMondoy>=-800 and posMondoy<=-100:
+            diffY=-100
             diffY-=posMondoy
-        elif posMondoy<-740:
+        elif posMondoy<-800:
             diffY=700
         else :
             diffY=0
@@ -57,7 +57,7 @@ class SfondoClass():
                 self.sfondoAct=self.sfondo1
             else:
                 self.sfondoAct=self.sfondo2
-            self.screen.blit(self.sole,((PosCielo,100-diffY),(self.size)))
+            self.screen.blit(self.sole,((PosCielo,130-diffY),(self.size)))
         else:
             if PosCielo<50:
                 self.sfondoAct=self.sfondo2
@@ -69,5 +69,5 @@ class SfondoClass():
                 self.sfondoAct=self.sfondo3
             else:
                 self.sfondoAct=self.sfondo2
-            self.screen.blit(self.luna,((PosCielo,100-diffY),(self.size)))
+            self.screen.blit(self.luna,((PosCielo,130-diffY),(self.size)))
         return ritorna
