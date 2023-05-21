@@ -6,6 +6,8 @@ from Mondo import MondoClass
 from Inventario_Rapido import Inventario
 from Riquadri import RiqScritto
 from HP import VitaClass
+from Sfondo import SfondoClass
+
 
 pygame.init()
 
@@ -14,11 +16,10 @@ screen=pygame.display.set_mode(sizeWindow)
 pygame.display.set_caption("TerraCraft2D")
 
 sfondorect=pygame.Rect((0,0),(1000,700))
-sfondoGioco=pygame.image.load("images/Sfondo.png")
 sfondoMenu=pygame.image.load("images/Minecraft2D.png")
 sfondoMenu=pygame.transform.scale(sfondoMenu,sizeWindow)
-sfondoGioco=pygame.transform.scale(sfondoGioco,sizeWindow)
 
+Sfondo = SfondoClass((-30,-30),(30,30),screen,sizeWindow)
 Mondo = MondoClass((0,0), sizeWindow, screen,[-40,-50])
 
 sizeMondi=(450,100)
@@ -60,6 +61,8 @@ box2=Inventario((360,25), sizeInventario, screen)
 box3=Inventario((420,25), sizeInventario, screen)
 box4=Inventario((480,25), sizeInventario, screen)
 box5=Inventario((540,25), sizeInventario, screen)
+
+
 
 # f=open("MondoOriginaleLarge.txt","r")
 # f1=open("Mondo.txt","w")
@@ -134,9 +137,9 @@ def scorriMondolati(player,Mondo,posMondox):
     return posMondox
 
 def scorriMondoAlto(player,Mondo,posMondoy):
-    if player.rect.top<=100:
+    if player.rect.top<=200:
         if player.vel[1]<0:
-            player.rect.top=100
+            player.rect.top=200
         
         posMondoy=posMondoy-player.vel[1]
         Mondo.blocchi=[]
@@ -277,8 +280,7 @@ def dannoDaCaduta(player):
     elif player.velMax>=11.8:
         danno=1
     
-    return danno
-        
+    return danno    
 
 # nFoglie=0
 # nLegno=0
@@ -321,6 +323,7 @@ PietraSuono=pygame.mixer.Sound("Sounds/StoneBreak.mp3")
 
 vitaTot=10
 regen=0
+tempo=0
 while True:
     if fase==1:
         
@@ -393,6 +396,10 @@ while True:
             posMondoy=dati[6]
             posPlayer=(dati[7],dati[8])
             vitaTot=dati[9]
+            tempo=dati[10]
+            Mondo.blocchi=[]
+            Mondo.blocchiAria=[]
+            Mondo.blocchiDietro=[]
             player=Personaggio(screen, posPlayer,(45,90))
             fase=2
             regen=0
@@ -588,6 +595,7 @@ while True:
             dati.append(player.rect.left)
             dati.append(player.rect.top)
             dati.append(vitaTot)
+            dati.append(tempo)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
 
             pygame.mixer.music.fadeout(1000)
@@ -595,12 +603,14 @@ while True:
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(-1,1)
 
-        screen.blit(sfondoGioco,sfondorect)
+        
         
         collisioneBlocchiLati(player, Mondo)
         posMondoy=scorriMondoAlto(player, Mondo, posMondoy)
         posMondox=scorriMondolati(player,Mondo,posMondox)
 
+        tempo*=Sfondo.draw(tempo,posMondoy)
+        
         Mondo.draw(posMondox,posMondoy)
         box1.draw(1,nFoglie)
         box2.draw(2,nLegno)
@@ -649,6 +659,6 @@ while True:
 
         player.muovi()
         player.draw()
-    
+    tempo+=1
     pygame.display.update()
     clock.tick(fps)
