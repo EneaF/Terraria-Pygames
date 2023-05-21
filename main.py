@@ -82,6 +82,9 @@ def collisioneBlocchiSopra(player,Mondo):
         if player.rect.collidepoint(posBlocco[0],posBlocco[1]-1):
             player.StopBasso(posBlocco[1]-1)
             noCol=False
+        if player.rect.collidepoint(posBlocco[0]+49,posBlocco[1]-1):
+            player.StopBasso(posBlocco[1]-1)
+            noCol=False
     if noCol:
         player.inAria=True
     else:
@@ -118,6 +121,7 @@ def scorriMondolati(player,Mondo,posMondox):
         player.nextDestra()
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
+        Mondo.blocchiDietro=[]
     if player.rect.left<=200 and player.muoviSinistra==True:
         if collisioneBlocchiLati(player, Mondo,6)==2:
             posMondox=posMondox-player.VelMovimento
@@ -126,6 +130,7 @@ def scorriMondolati(player,Mondo,posMondox):
         player.nextSinistra()
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
+        Mondo.blocchiDietro=[]
     return posMondox
 
 def scorriMondoAlto(player,Mondo,posMondoy):
@@ -136,6 +141,7 @@ def scorriMondoAlto(player,Mondo,posMondoy):
         posMondoy=posMondoy-player.vel[1]
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
+        Mondo.blocchiDietro=[]
     
     if player.rect.bottom>550:
         if player.vel[1]>0:
@@ -143,6 +149,7 @@ def scorriMondoAlto(player,Mondo,posMondoy):
         posMondoy=posMondoy-player.vel[1]
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
+        Mondo.blocchiDietro=[]
     return posMondoy
 
 def DisegnaMenu():
@@ -413,27 +420,63 @@ while True:
             
             if event.type == MOUSEBUTTONDOWN and event.button==1:
                 pos=pygame.mouse.get_pos()
+                if box1.rectBox.collidepoint(pos):
+                    lum=1
+                if box2.rectBox.collidepoint(pos):
+                    lum=2
+                if box3.rectBox.collidepoint(pos):
+                    lum=3
+                if box4.rectBox.collidepoint(pos):
+                    lum=4
+                if box5.rectBox.collidepoint(pos):
+                    lum=5
+
                 for blocco in Mondo.blocchi:
                     rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
                     if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
                         if rectTmp.collidepoint(pos):
-                            if blocco[2]==1 and nErba<999:
+                            if blocco[2]=="E" and nErba<999:
                                 nErba+=1
                                 ErbaSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]==2 and nTerra<999:
+                            elif blocco[2]=="T" and nTerra<999:
                                 nTerra+=1
                                 TerraSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]==3 and nPietra<999:
+                            elif blocco[2]=="P" and nPietra<999:
                                 nPietra+=1
                                 PietraSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]==4 and nFoglie<999:
+                            elif blocco[2]=="F" and nFoglie<999:
                                 nFoglie+=1
                                 FoglieSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]==5 and nLegno<999:
+                            elif blocco[2]=="L" and nLegno<999:
+                                nLegno+=1
+                                LegnoSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+
+                for blocco in Mondo.blocchiDietro:
+                    rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
+                    if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
+                        if rectTmp.collidepoint(pos):
+                            if blocco[2]=="e" and nErba<999:
+                                nErba+=1
+                                ErbaSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="t" and nTerra<999:
+                                nTerra+=1
+                                TerraSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="p" and nPietra<999:
+                                nPietra+=1
+                                PietraSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="f" and nFoglie<999:
+                                nFoglie+=1
+                                FoglieSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="l" and nLegno<999:
                                 nLegno+=1
                                 LegnoSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
@@ -464,6 +507,33 @@ while True:
                                 nTerra-=1
                                 TerraSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
+
+            if event.type == MOUSEBUTTONDOWN and event.button==2:
+                pos=pygame.mouse.get_pos()
+                for bloccoAria in Mondo.blocchiAria:
+                    rectTmp=pygame.Rect((bloccoAria[0],bloccoAria[1]),(50,50))
+                    if rectTmp.collidepoint(pos):
+                        if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
+                            if lum==1 and nFoglie>0:
+                                nFoglie-=1
+                                FoglieSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==2 and nLegno>0:
+                                nLegno-=1
+                                LegnoSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==3 and nPietra>0:
+                                nPietra-=1
+                                PietraSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==4 and nErba>0:
+                                nErba-=1
+                                ErbaSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==5 and nTerra>0:
+                                nTerra-=1
+                                TerraSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                         
                             
 
