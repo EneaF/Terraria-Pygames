@@ -23,12 +23,18 @@ class Inventario():
         self.pietra = pygame.image.load("images/Stone.jpeg")
         self.erba = pygame.image.load("images/Erba.png")
         self.terra = pygame.image.load("images/Terra.jpeg")
+        self.oakPlanks = pygame.image.load("images/oakPlanks.png")
+        self.scala = pygame.image.load("images/Ladder.png")
+        self.sapling = pygame.image.load("images/sapling.png")
 
         self.foglia = pygame.transform.scale(self.foglia,self.sizeItem)
         self.legno = pygame.transform.scale(self.legno,self.sizeItem)
         self.pietra = pygame.transform.scale(self.pietra,self.sizeItem)
         self.erba = pygame.transform.scale(self.erba,self.sizeItem)
         self.terra = pygame.transform.scale(self.terra,self.sizeItem)
+        self.oakPlanks = pygame.transform.scale(self.oakPlanks,self.sizeItem)
+        self.scala = pygame.transform.scale(self.scala,self.sizeItem)
+        self.sapling = pygame.transform.scale(self.sapling,self.sizeItem)
 
     def draw(self,blocco,qta=0,sel=False):
         qta=str(qta)
@@ -45,8 +51,14 @@ class Inventario():
             bloccoDisplay=self.pietra
         elif blocco==4:
             bloccoDisplay=self.erba
-        else:
+        elif blocco==5:
             bloccoDisplay=self.terra
+        elif blocco==6:
+            bloccoDisplay=self.oakPlanks
+        elif blocco==7:
+            bloccoDisplay=self.scala
+        elif blocco==8:
+            bloccoDisplay=self.sapling
         
         carattere = pygame.font.Font(None,int(self.size[0]/10*5))
         scritta = carattere.render(qta,True,(50,50,50))

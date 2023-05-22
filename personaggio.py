@@ -146,6 +146,15 @@ class Personaggio():
         self.rect.bottom=topBlocco+1
         self.vel[1]=0
         self.inAria=False
+    
+    def SaleScala(self):
+        self.vel[1]=-4
+
+    def ScendeScala(self):
+        self.vel[1]=+4
+    
+    def SuScala(self):
+        self.vel[1]=0
 
 
     def muovi(self):

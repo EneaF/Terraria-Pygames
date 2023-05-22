@@ -1,4 +1,4 @@
-import pygame, sys, math,random
+import pygame, sys, math, random
 from math import sqrt
 from pygame.locals import *
 from personaggio import Personaggio
@@ -61,7 +61,9 @@ box2=Inventario((360,25), sizeInventario, screen)
 box3=Inventario((420,25), sizeInventario, screen)
 box4=Inventario((480,25), sizeInventario, screen)
 box5=Inventario((540,25), sizeInventario, screen)
-
+box6=Inventario((600,25), sizeInventario, screen)
+box7=Inventario((660,25), sizeInventario, screen)
+box8=Inventario((720,25), sizeInventario, screen)
 
 
 # f=open("MondoOriginaleLarge.txt","r")
@@ -125,6 +127,7 @@ def scorriMondolati(player,Mondo,posMondox):
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
         Mondo.blocchiDietro=[]
+        Mondo.scale=[]
     if player.rect.left<=200 and player.muoviSinistra==True:
         if collisioneBlocchiLati(player, Mondo,6)==2:
             posMondox=posMondox-player.VelMovimento
@@ -134,6 +137,7 @@ def scorriMondolati(player,Mondo,posMondox):
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
         Mondo.blocchiDietro=[]
+        Mondo.scale=[]
     return posMondox
 
 def scorriMondoAlto(player,Mondo,posMondoy):
@@ -145,6 +149,7 @@ def scorriMondoAlto(player,Mondo,posMondoy):
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
         Mondo.blocchiDietro=[]
+        Mondo.scale=[]
     
     if player.rect.bottom>550:
         if player.vel[1]>0:
@@ -153,6 +158,7 @@ def scorriMondoAlto(player,Mondo,posMondoy):
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
         Mondo.blocchiDietro=[]
+        Mondo.scale=[]
     return posMondoy
 
 def DisegnaMenu():
@@ -282,18 +288,55 @@ def dannoDaCaduta(player):
     
     return danno    
 
-# nFoglie=0
-# nLegno=0
-# nPietra=0
-# nErba=0
-# nTerra=0
-lum=0
-# posPlayer=(500,350)
+def saleScala(player,Mondo):
+    for scala in Mondo.scale:
+        scalaRect=pygame.Rect((scala[0],scala[1]),(50,53))
+        if scalaRect.collidepoint(player.rect.bottomleft)==True or scalaRect.collidepoint(player.rect.bottomright)==True :
+            player.SaleScala()
+            player.inAria=False
+            player.velMax=0
+
+def scendeScala(player,Mondo):
+    for scala in Mondo.scale:
+        scalaRect=pygame.Rect((scala[0],scala[1]),(50,53))
+        if scalaRect.collidepoint(player.rect.bottomleft)==True or scalaRect.collidepoint(player.rect.bottomright)==True :
+            player.ScendeScala()
+            player.inAria=False
+            player.velMax=0
+
+def suScala(player,Mondo):
+    for scala in Mondo.scale:
+        scalaRect=pygame.Rect((scala[0],scala[1]),(50,51))
+        if scalaRect.collidepoint(player.rect.bottomleft)==True or scalaRect.collidepoint(player.rect.bottomright)==True :
+            player.SuScala()
+            player.inAria=False
+            player.velMax=0
+
+def CresceSapling(Mondo,posMondox,posMondoy):
+    for bloccoDietro in Mondo.blocchiDietro:
+        if bloccoDietro[2]=="S":
+            # Servirebbe un if per controllare che i blocchi dove piazzare foglie e legno siano liberi
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0],bloccoDietro[1]),2)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0],bloccoDietro[1]-50),2)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0],bloccoDietro[1]-100),2)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0],bloccoDietro[1]-150),2)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]-100,bloccoDietro[1]-100),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]-100,bloccoDietro[1]-150),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]-50,bloccoDietro[1]-100),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]-50,bloccoDietro[1]-150),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]-50,bloccoDietro[1]-200),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]-50,bloccoDietro[1]-250),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0],bloccoDietro[1]-200),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0],bloccoDietro[1]-250),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+50,bloccoDietro[1]-100),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+50,bloccoDietro[1]-150),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+50,bloccoDietro[1]-200),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+50,bloccoDietro[1]-250),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+100,bloccoDietro[1]-100),1)
+            Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+100,bloccoDietro[1]-150),1)
 
 
-# posMondox=-550
-# posMondoy=-250
-fase=1
+
 
 Soundtrack=["Sounds/MainTheme/Soundtrack (1).mp3","Sounds/MainTheme/Soundtrack (2).mp3",
             "Sounds/MainTheme/Soundtrack (3).mp3","Sounds/MainTheme/Soundtrack (4).mp3",
@@ -320,8 +363,8 @@ FoglieSuono=pygame.mixer.Sound("Sounds/foglie.mp3")
 TerraSuono=pygame.mixer.Sound("Sounds/DirtBreak.mp3")
 PietraSuono=pygame.mixer.Sound("Sounds/StoneBreak.mp3")
 
-
-vitaTot=10
+lum=0
+fase=1
 regen=0
 tempo=0
 while True:
@@ -397,9 +440,13 @@ while True:
             posPlayer=(dati[7],dati[8])
             vitaTot=dati[9]
             tempo=dati[10]
+            nOakPlanks=dati[11]
+            nScale=dati[12]
+            nSaplings=dati[13]
             Mondo.blocchi=[]
             Mondo.blocchiAria=[]
             Mondo.blocchiDietro=[]
+            Mondo.scale=[]
             player=Personaggio(screen, posPlayer,(45,90))
             fase=2
             regen=0
@@ -408,6 +455,9 @@ while True:
             pygame.mixer.music.load(random.choice(Soundtrack))
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(0,1)
+
+    
+
 
     elif fase==2:
         if pygame.mixer.music.get_busy()==False:
@@ -437,6 +487,12 @@ while True:
                     lum=4
                 if box5.rectBox.collidepoint(pos):
                     lum=5
+                if box6.rectBox.collidepoint(pos):
+                    lum=6
+                if box7.rectBox.collidepoint(pos):
+                    lum=7
+                if box8.rectBox.collidepoint(pos):
+                    lum=8
 
                 for blocco in Mondo.blocchi:
                     rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
@@ -460,6 +516,10 @@ while True:
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                             elif blocco[2]=="L" and nLegno<999:
                                 nLegno+=1
+                                LegnoSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="O" and nOakPlanks<999:
+                                nOakPlanks+=1
                                 LegnoSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
@@ -487,12 +547,24 @@ while True:
                                 nLegno+=1
                                 LegnoSuono.play()
                                 Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="o" and nOakPlanks<999:
+                                nOakPlanks+=1
+                                LegnoSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="s" and nScale<999:
+                                nScale+=1
+                                LegnoSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                            elif blocco[2]=="S" and nSaplings<999:
+                                nSaplings+=1
+                                FoglieSuono.play()
+                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
             if event.type == MOUSEBUTTONDOWN and event.button==3:
                 pos=pygame.mouse.get_pos()
                 for bloccoAria in Mondo.blocchiAria:
                     rectTmp=pygame.Rect((bloccoAria[0],bloccoAria[1]),(50,50))
-                    if rectTmp.collidepoint(pos):
+                    if rectTmp.collidepoint(pos)==True and player.rect.collidepoint(rectTmp.topleft)==False and player.rect.collidepoint(rectTmp.topright)==False and player.rect.collidepoint(rectTmp.bottomleft)==False and player.rect.collidepoint(rectTmp.bottomright)==False and player.rect.collidepoint(rectTmp.center)==False:
                         if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
                             if lum==1 and nFoglie>0:
                                 nFoglie-=1
@@ -513,6 +585,10 @@ while True:
                             elif lum==5 and nTerra>0:
                                 nTerra-=1
                                 TerraSuono.play()
+                                Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==6 and nOakPlanks>0:
+                                nOakPlanks-=1
+                                LegnoSuono.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
 
             if event.type == MOUSEBUTTONDOWN and event.button==2:
@@ -541,8 +617,43 @@ while True:
                                 nTerra-=1
                                 TerraSuono.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
-                        
-                            
+                            elif lum==6 and nOakPlanks>0:
+                                nOakPlanks-=1
+                                LegnoSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==7 and nScale>0:
+                                nScale-=1
+                                LegnoSuono.play()
+                                Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+                            elif lum==8 and nSaplings>0:
+                                for blocco in Mondo.blocchi:
+                                    if blocco==(bloccoAria[0],bloccoAria[1]+50,"E") or blocco==(bloccoAria[0],bloccoAria[1]+50,"T"):
+                                        nSaplings-=1
+                                        FoglieSuono.play()
+                                        Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
+
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_c and lum==6 and nLegno>0:
+                    nLegno-=1
+                    nOakPlanks+=4
+                if event.key==pygame.K_c and lum==7 and nOakPlanks>1:
+                    nOakPlanks-=2
+                    nScale+=1
+                if event.key==pygame.K_c and lum==8 and nFoglie>0:
+                    nFoglie-=1
+                    if random.randint(0,4)==2:
+                        nSaplings+=1
+
+                if event.key==pygame.K_e:
+                    if lum==8:
+                        lum=1
+                    else:
+                        lum=lum+1
+                if event.key==pygame.K_q:
+                    if lum==1:
+                        lum=8
+                    else:
+                        lum=lum-1
 
 
         keys = pygame.key.get_pressed()
@@ -562,6 +673,14 @@ while True:
         if keys[K_SPACE]:
             player.Salto()
         
+        if keys[K_w]:
+            saleScala(player,Mondo)
+        if keys[K_s]:
+            scendeScala(player,Mondo)
+        if keys[K_LSHIFT]:
+            suScala(player,Mondo)
+
+        
         if keys[K_1]:
             lum=1
         if keys[K_2]:
@@ -572,16 +691,13 @@ while True:
             lum=4
         if keys[K_5]:
             lum=5
-        if keys[K_e]:
-            if lum==5:
-                lum=1
-            else:
-                lum=lum+1
-        if keys[K_q]:
-            if lum==1:
-                lum=5
-            else:
-                lum=lum-1
+        if keys[K_6]:
+            lum=6
+        if keys[K_7]:
+            lum=7
+        if keys[K_8]:
+            lum=8
+
         if keys[K_ESCAPE]:
             fase=1
             dati=[]
@@ -596,6 +712,9 @@ while True:
             dati.append(player.rect.top)
             dati.append(vitaTot)
             dati.append(tempo)
+            dati.append(nOakPlanks)
+            dati.append(nScale)
+            dati.append(nSaplings)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
 
             pygame.mixer.music.fadeout(1000)
@@ -608,7 +727,8 @@ while True:
         collisioneBlocchiLati(player, Mondo)
         posMondoy=scorriMondoAlto(player, Mondo, posMondoy)
         posMondox=scorriMondolati(player,Mondo,posMondox)
-
+        if tempo>=100 and tempo<=200 and Sfondo.notte==False:
+            CresceSapling(Mondo,posMondox,posMondoy)
         tempo*=Sfondo.draw(tempo,posMondoy)
         
         Mondo.draw(posMondox,posMondoy)
@@ -617,6 +737,9 @@ while True:
         box3.draw(3,nPietra)
         box4.draw(4,nErba)
         box5.draw(5,nTerra)
+        box6.draw(6,nOakPlanks)
+        box7.draw(7,nScale)
+        box8.draw(8,nSaplings)
 
         player.calcolaVelMax()
         if caduto==True and player.velMax>=11.8:
@@ -656,6 +779,12 @@ while True:
             box4.draw(4,nErba,True)
         elif lum==5:
             box5.draw(5,nTerra,True)
+        elif lum==6:
+            box6.draw(6,nOakPlanks,True)
+        elif lum==7:
+            box7.draw(7,nScale,True)
+        elif lum==8:
+            box8.draw(8,nSaplings,True)
 
         player.muovi()
         player.draw()
