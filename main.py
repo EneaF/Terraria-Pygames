@@ -19,11 +19,15 @@ sfondorect=pygame.Rect((0,0),(1000,700))
 sfondoMenu=pygame.image.load("images/Minecraft2D.png")
 sfondoMenu=pygame.transform.scale(sfondoMenu,sizeWindow)
 
+YouDied=pygame.image.load("images/YouDied.png")
+YouDied=pygame.transform.scale(YouDied,sizeWindow)
+
 Sfondo = SfondoClass((-30,-30),(30,30),screen,sizeWindow)
 Mondo = MondoClass((0,0), sizeWindow, screen,[-40,-50])
 
 sizeMondi=(450,100)
 sizeReset=(150,100)
+sizeYouDied=(450,75)
 
 Mondo1=RiqScritto(screen, (100,200), sizeMondi, "MONDO 1")
 Mondo2=RiqScritto(screen, (100,325), sizeMondi, "MONDO 2")
@@ -36,6 +40,9 @@ Reset3S=RiqScritto(screen, (600,450), sizeReset, "Map S")
 Reset3L=RiqScritto(screen, (800,450), sizeReset, "Map L")
 
 QUITButton=RiqScritto(screen, (400,575), (200,100), "QUIT")
+
+Respawn=RiqScritto(screen, (25,600), sizeYouDied,"Respawn")
+TitleScreen=RiqScritto(screen,(525,600), sizeYouDied,"Title Screen")
 
 vita=[]
 vitaTmp=[VitaClass((120,30),(25,25),screen),0]
@@ -335,7 +342,9 @@ def CresceSapling(Mondo,posMondox,posMondoy):
             Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+100,bloccoDietro[1]-100),1)
             Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoDietro[0]+100,bloccoDietro[1]-150),1)
 
-
+def disegnaYouDied():
+    Respawn.draw()
+    TitleScreen.draw()
 
 
 Soundtrack=["Sounds/MainTheme/Soundtrack (1).mp3","Sounds/MainTheme/Soundtrack (2).mp3",
@@ -456,7 +465,104 @@ while True:
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(0,1)
 
-    
+    elif fase==4:
+        screen.blit(YouDied,sfondorect)
+        disegnaYouDied()
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN and event.button==1:
+                pos=pygame.mouse.get_pos()
+                if Respawn.rect.collidepoint(pos):
+                    nFoglie=0
+                    nLegno=0
+                    nErba=0
+                    nOakPlanks=0
+                    nTerra=0
+                    nScale=0
+                    nSaplings=0
+                    nPietra=0
+                    posMondox=-550
+                    posMondoy=-200
+                    player.rect.left=500
+                    player.rect.top=350
+                    vitaTot=10
+                    fase=2
+                    Mondo.blocchi=[]
+                    Mondo.blocchiAria=[]
+                    Mondo.blocchiDietro=[]
+                    Mondo.scale=[]
+
+                if TitleScreen.rect.collidepoint(pos):
+                    fase=1
+                    dati=[]
+                    dati.append(nFoglie)
+                    dati.append(nLegno)
+                    dati.append(nPietra)
+                    dati.append(nErba)
+                    dati.append(nTerra)
+                    dati.append(posMondox)
+                    dati.append(posMondoy)
+                    dati.append(player.rect.left)
+                    dati.append(player.rect.top)
+                    dati.append(vitaTot)
+                    dati.append(tempo)
+                    dati.append(nOakPlanks)
+                    dati.append(nScale)
+                    dati.append(nSaplings)
+                    SalvaDati(dati,nomeSalvataggio,nomeMondo)
+
+                    pygame.mixer.music.fadeout(1000)
+                    pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
+                    pygame.mixer.music.set_volume(0.5)
+                    pygame.mixer.music.play(-1,1)
+                    
+        
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]:
+            fase=1
+            dati=[]
+            dati.append(nFoglie)
+            dati.append(nLegno)
+            dati.append(nPietra)
+            dati.append(nErba)
+            dati.append(nTerra)
+            dati.append(posMondox)
+            dati.append(posMondoy)
+            dati.append(player.rect.left)
+            dati.append(player.rect.top)
+            dati.append(vitaTot)
+            dati.append(tempo)
+            dati.append(nOakPlanks)
+            dati.append(nScale)
+            dati.append(nSaplings)
+            SalvaDati(dati,nomeSalvataggio,nomeMondo)
+
+            pygame.mixer.music.fadeout(1000)
+            pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1,1)
+            
+        if keys[K_r]:
+            nFoglie=0
+            nLegno=0
+            nErba=0
+            nOakPlanks=0
+            nTerra=0
+            nScale=0
+            nSaplings=0
+            nPietra=0
+            posMondox=-550
+            posMondoy=-200
+            player.rect.left=500
+            player.rect.top=350
+            vitaTot=10
+            fase=2
+            Mondo.blocchi=[]
+            Mondo.blocchiAria=[]
+            Mondo.blocchiDietro=[]
+            Mondo.scale=[]
 
 
     elif fase==2:
@@ -750,6 +856,8 @@ while True:
             vitaTot+=1
             regen = 0
         
+        if vitaTot==0:
+            fase=4
         vitaTot-=danno
         if vitaTot<0:
             vitaTot=0

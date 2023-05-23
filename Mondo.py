@@ -305,8 +305,4 @@ class MondoClass():
                         self.screen.blit(self.sapling,((posizx,posizy),(self.sizeBlocco)))
                         if (posizx,posizy,el) not in self.blocchiDietro:
                             self.blocchiDietro.append((posizx,posizy,el))
-                    
-                    
-            
-
-                
+         
