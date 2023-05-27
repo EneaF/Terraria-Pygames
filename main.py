@@ -17,7 +17,9 @@ pygame.display.set_caption("TerraCraft2D")
 
 sfondorect=pygame.Rect((0,0),(1000,700))
 sfondoMenu=pygame.image.load("images/Minecraft2D.png")
+sfondoMorto=pygame.image.load("images/YouDied.jpg")
 sfondoMenu=pygame.transform.scale(sfondoMenu,sizeWindow)
+sfondoMorto=pygame.transform.scale(sfondoMorto,sizeWindow)
 
 Sfondo = SfondoClass((-30,-30),(30,30),screen,sizeWindow)
 Mondo = MondoClass((0,0), sizeWindow, screen,[-40,-50])
@@ -36,6 +38,13 @@ Reset3S=RiqScritto(screen, (600,450), sizeReset, "Map S")
 Reset3L=RiqScritto(screen, (800,450), sizeReset, "Map L")
 
 QUITButton=RiqScritto(screen, (400,575), (200,100), "QUIT")
+
+FpsF3=RiqScritto(screen,(50,100),(100,100),"Fps: ")
+NdayF3=RiqScritto(screen,(50,130),(100,100),"Day: ")
+PosXMF3=RiqScritto(screen,(50,160),(100,100),"XM:")
+PosYMF3=RiqScritto(screen,(150,160),(100,100),"YM: ")
+PosXPF3=RiqScritto(screen,(50,190),(100,100),"XP: ")
+PosYPF3=RiqScritto(screen,(150,190),(100,100),"YP: ")
 
 vita=[]
 vitaTmp=[VitaClass((120,30),(25,25),screen),0]
@@ -65,14 +74,6 @@ box6=Inventario((600,25), sizeInventario, screen)
 box7=Inventario((660,25), sizeInventario, screen)
 box8=Inventario((720,25), sizeInventario, screen)
 
-
-# f=open("MondoOriginaleLarge.txt","r")
-# f1=open("Mondo.txt","w")
-# f1.truncate()
-# for riga in f:
-#     f1.write(riga)
-# f.close()
-# f1.close()
 
 
 def collisioneBlocchiSopra(player,Mondo):
@@ -367,6 +368,7 @@ lum=0
 fase=1
 regen=0
 tempo=0
+F3=False
 while True:
     if fase==1:
         
@@ -443,6 +445,8 @@ while True:
             nOakPlanks=dati[11]
             nScale=dati[12]
             nSaplings=dati[13]
+            nDay=dati[14]
+            nDay1=dati[15]
             Mondo.blocchi=[]
             Mondo.blocchiAria=[]
             Mondo.blocchiDietro=[]
@@ -456,7 +460,12 @@ while True:
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(0,1)
 
-    
+    elif fase==4:
+        screen.blit(sfondoMorto,sfondorect)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
 
 
     elif fase==2:
@@ -467,6 +476,7 @@ while True:
             pygame.mixer.music.play(0,1)
         caduto=False
         danno=0
+        
         caduto=collisioneBlocchiSopra(player, Mondo)
         collisioneBlocchiSotto(player, Mondo)
         
@@ -654,6 +664,12 @@ while True:
                         lum=8
                     else:
                         lum=lum-1
+                
+                if event.key==pygame.K_F3:
+                    if F3:
+                        F3=False
+                    else:
+                        F3=True
 
 
         keys = pygame.key.get_pressed()
@@ -715,6 +731,8 @@ while True:
             dati.append(nOakPlanks)
             dati.append(nScale)
             dati.append(nSaplings)
+            dati.append(nDay)
+            dati.append(nDay1)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
 
             pygame.mixer.music.fadeout(1000)
@@ -769,6 +787,9 @@ while True:
         for cuore in vita:
             cuore[0].draw(cuore[1])
 
+        if vitaTot==0:
+            fase=4
+
         if lum==1:
             box1.draw(1,nFoglie,True)
         elif lum==2:
@@ -785,9 +806,22 @@ while True:
             box7.draw(7,nScale,True)
         elif lum==8:
             box8.draw(8,nSaplings,True)
+        
+        if F3:
+            FpsF3.drawNormal(str(round(clock.get_fps())))
+            NdayF3.drawNormal(str(nDay))
+            PosXMF3.drawNormal(str(round(posMondox)))
+            PosYMF3.drawNormal(str(round(posMondoy)))
+            PosXPF3.drawNormal(str(round(player.rect.left)))
+            PosYPF3.drawNormal(str(round(player.rect.bottom)))
 
         player.muovi()
         player.draw()
+        if Sfondo.notte==True and nDay1==nDay:
+            nDay=nDay1+1
+        elif Sfondo.notte==False and nDay1<nDay:
+            nDay1=nDay
+
     tempo+=1
     pygame.display.update()
     clock.tick(fps)

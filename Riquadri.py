@@ -5,6 +5,7 @@ class RiqScritto():
     def __init__(self,screen,pos,size,testo):
         self.screen=screen
         self.testo=str(testo)
+        self.pos=pos
 
         self.image = pygame.surface.Surface(size)
         self.rect = pygame.Rect((pos[0],pos[1]),[size[0],size[1]])
@@ -40,3 +41,11 @@ class RiqScritto():
         self.image.blit(scritta,scrittaRect)
 
         self.screen.blit(self.image,self.rect)
+
+    def drawNormal(self,txt):
+        carattere=pygame.font.Font(None,25)
+
+        scritta = carattere.render(self.testo+txt,True,self.grigio)
+        scrittaRect=scritta.get_rect()
+        scrittaRect.topleft=self.pos
+        self.screen.blit(scritta,scrittaRect)
