@@ -17,9 +17,9 @@ pygame.display.set_caption("TerraCraft2D")
 
 sfondorect=pygame.Rect((0,0),(1000,700))
 sfondoMenu=pygame.image.load("images/Minecraft2D.png")
-sfondoMorto=pygame.image.load("images/YouDied.jpg")
 sfondoMenu=pygame.transform.scale(sfondoMenu,sizeWindow)
-sfondoMorto=pygame.transform.scale(sfondoMorto,sizeWindow)
+YouDied=pygame.image.load("images/YouDied.png")
+YouDied=pygame.transform.scale(YouDied,sizeWindow)
 
 
 Sfondo = SfondoClass((-30,-30),(30,30),screen,sizeWindow)
@@ -370,6 +370,7 @@ ErbaSuono=pygame.mixer.Sound("Sounds/GrassBreak.mp3")
 FoglieSuono=pygame.mixer.Sound("Sounds/foglie.mp3")
 TerraSuono=pygame.mixer.Sound("Sounds/DirtBreak.mp3")
 PietraSuono=pygame.mixer.Sound("Sounds/StoneBreak.mp3")
+YouDiedSuono=pygame.mixer.Sound("Sounds/YouDiedSound.mp3")
 
 lum=0
 fase=1
@@ -477,20 +478,21 @@ while True:
             if event.type == MOUSEBUTTONDOWN and event.button==1:
                 pos=pygame.mouse.get_pos()
                 if Respawn.rect.collidepoint(pos):
-                    nFoglie=0
-                    nLegno=0
-                    nErba=0
-                    nOakPlanks=0
-                    nTerra=0
-                    nScale=0
-                    nSaplings=0
-                    nPietra=0
+                    nFoglie=round(nFoglie/2)
+                    nLegno=round(nLegno/2)
+                    nErba=round(nErba/2)
+                    nOakPlanks=round(nOakPlanks/2)
+                    nTerra=round(nTerra/2)
+                    nScale=round(nScale/2)
+                    nSaplings=round(nSaplings/2)
+                    nPietra=round(nPietra/2)
                     posMondox=-550
                     posMondoy=-200
                     player.rect.left=500
                     player.rect.top=350
                     vitaTot=10
                     fase=2
+                    pygame.mixer.music.fadeout(1000)
                     Mondo.blocchi=[]
                     Mondo.blocchiAria=[]
                     Mondo.blocchiDietro=[]
@@ -513,6 +515,8 @@ while True:
                     dati.append(nOakPlanks)
                     dati.append(nScale)
                     dati.append(nSaplings)
+                    dati.append(nDay)
+                    dati.append(nDay1)
                     SalvaDati(dati,nomeSalvataggio,nomeMondo)
 
                     pygame.mixer.music.fadeout(1000)
@@ -539,6 +543,8 @@ while True:
             dati.append(nOakPlanks)
             dati.append(nScale)
             dati.append(nSaplings)
+            dati.append(nDay)
+            dati.append(nDay1)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
 
             pygame.mixer.music.fadeout(1000)
@@ -868,7 +874,14 @@ while True:
             regen = 0
         
         if vitaTot==0:
+            print("ciao0")
+            pygame.mixer.music.stop()
             fase=4
+            YouDiedSuono.play()
+            pygame.mixer.music.load("Sounds/MainTheme/YouDiedMusic.mp3")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1)
+            print("ciao")
         vitaTot-=danno
         if vitaTot<0:
             vitaTot=0
@@ -887,9 +900,6 @@ while True:
         
         for cuore in vita:
             cuore[0].draw(cuore[1])
-
-        if vitaTot==0:
-            fase=4
 
         if lum==1:
             box1.draw(1,nFoglie,True)
