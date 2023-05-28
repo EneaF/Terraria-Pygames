@@ -544,6 +544,8 @@ while True:
                     Mondo.blocchiAria=[]
                     Mondo.blocchiDietro=[]
                     Mondo.scale=[]
+                    Fantasma=[]
+                    fantasmaPres=0
 
                 if TitleScreen.rect.collidepoint(pos):
                     fase=1
@@ -593,6 +595,8 @@ while True:
             dati.append(nDay)
             dati.append(nDay1)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
+            Fantasma=[]
+            fantasmaPres=0
 
             pygame.mixer.music.fadeout(1000)
             pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
@@ -618,6 +622,8 @@ while True:
             Mondo.blocchiAria=[]
             Mondo.blocchiDietro=[]
             Mondo.scale=[]
+            Fantasma=[]
+            fantasmaPres=0
 
 
     elif fase==2:
@@ -920,6 +926,8 @@ while True:
             pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(-1,1)
+            Fantasma=[]
+            fantasmaPres=0
 
         
         
