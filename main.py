@@ -406,13 +406,17 @@ Soundtrack=["Sounds/MainTheme/Soundtrack (1).mp3","Sounds/MainTheme/Soundtrack (
 pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
+LegnoSuono = [pygame.mixer.Sound("Sounds/WoodBreak.mp3"),pygame.mixer.Sound("Sounds/Woodplacing2.mp3"),pygame.mixer.Sound("Sounds/Woodplacing3.mp3")]
+ErbaSuono=[pygame.mixer.Sound("Sounds/GrassBreak.mp3"),pygame.mixer.Sound("Sounds/GrassBreak2.mp3"),pygame.mixer.Sound("Sounds/Grassbreak3.mp3"),pygame.mixer.Sound("Sounds/Grassbreak4.mp3")]
+PietraSuono=[pygame.mixer.Sound("Sounds/StoneBreak.mp3"),pygame.mixer.Sound("Sounds/StoneBreak2.mp3"),pygame.mixer.Sound("Sounds/StoneBreak3.mp3")]
 dannoSuono=pygame.mixer.Sound("Sounds/Damage.mp3")
-LegnoSuono=pygame.mixer.Sound("Sounds/WoodBreak.mp3")
-ErbaSuono=pygame.mixer.Sound("Sounds/GrassBreak.mp3")
 FoglieSuono=pygame.mixer.Sound("Sounds/foglie.mp3")
 TerraSuono=pygame.mixer.Sound("Sounds/DirtBreak.mp3")
-PietraSuono=pygame.mixer.Sound("Sounds/StoneBreak.mp3")
+RespawnSuono=pygame.mixer.Sound("Sounds/Respawn.mp3")
 YouDiedSuono=pygame.mixer.Sound("Sounds/YouDiedSound.mp3")
+SparoSuono=pygame.mixer.Sound("Sounds/Gunshot.mp3")
+FantasmaSuono=pygame.mixer.Sound("Sounds/Ghostdeath.mp3")
+Fantasmarisata=pygame.mixer.Sound("Sounds/Ghostlaugh.mp3")
 
 lum=0
 fase=1
@@ -540,6 +544,7 @@ while True:
                     vitaTot=10
                     fase=2
                     pygame.mixer.music.fadeout(1000)
+                    RespawnSuono.play()
                     Mondo.blocchi=[]
                     Mondo.blocchiAria=[]
                     Mondo.blocchiDietro=[]
@@ -670,6 +675,7 @@ while True:
                         cooldown=0
                         ProPres=True
                         Proiettile=ProiettileSpara(player.rect.centerx,player.rect.centery)
+                        SparoSuono.play()
                         if (pos[0]-player.rect.centerx)==0:
                             velProX=0
                             velProY=Proiettile.vel
@@ -690,7 +696,8 @@ while True:
                             if rectTmp.collidepoint(pos):
                                 if blocco[2]=="E" and nErba<999:
                                     nErba+=1
-                                    ErbaSuono.play()
+                                    choice = random.choice(ErbaSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="T" and nTerra<999:
                                     nTerra+=1
@@ -698,7 +705,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="P" and nPietra<999:
                                     nPietra+=1
-                                    PietraSuono.play()
+                                    choice = random.choice(PietraSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="F" and nFoglie<999:
                                     nFoglie+=1
@@ -706,11 +714,13 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="L" and nLegno<999:
                                     nLegno+=1
-                                    LegnoSuono.play()
+                                    choice = random.choice(LegnoSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="O" and nOakPlanks<999:
                                     nOakPlanks+=1
-                                    LegnoSuono.play()
+                                    choice = random.choice(LegnoSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
                     for blocco in Mondo.blocchiDietro:
@@ -719,7 +729,8 @@ while True:
                             if rectTmp.collidepoint(pos):
                                 if blocco[2]=="e" and nErba<999:
                                     nErba+=1
-                                    ErbaSuono.play()
+                                    choice = random.choice(ErbaSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="t" and nTerra<999:
                                     nTerra+=1
@@ -727,7 +738,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="p" and nPietra<999:
                                     nPietra+=1
-                                    PietraSuono.play()
+                                    choice = random.choice(PietraSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="f" and nFoglie<999:
                                     nFoglie+=1
@@ -735,15 +747,18 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="l" and nLegno<999:
                                     nLegno+=1
-                                    LegnoSuono.play()
+                                    choice = random.choice(LegnoSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="o" and nOakPlanks<999:
                                     nOakPlanks+=1
-                                    LegnoSuono.play()
+                                    choice = random.choice(LegnoSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="s" and nScale<999:
                                     nScale+=1
-                                    LegnoSuono.play()
+                                    choice = random.choice(LegnoSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="S" and nSaplings<999:
                                     nSaplings+=1
@@ -762,15 +777,18 @@ while True:
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==2 and nLegno>0:
                                 nLegno-=1
-                                LegnoSuono.play()
+                                choice = random.choice(LegnoSuono)
+                                choice.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==3 and nPietra>0:
                                 nPietra-=1
-                                PietraSuono.play()
+                                choice = random.choice(PietraSuono)
+                                choice.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==4 and nErba>0:
                                 nErba-=1
-                                ErbaSuono.play()
+                                choice = random.choice(ErbaSuono)
+                                choice.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==5 and nTerra>0:
                                 nTerra-=1
@@ -778,7 +796,8 @@ while True:
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==6 and nOakPlanks>0:
                                 nOakPlanks-=1
-                                LegnoSuono.play()
+                                choice = random.choice(LegnoSuono)
+                                choice.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
 
             if event.type == MOUSEBUTTONDOWN and event.button==2:
@@ -793,15 +812,18 @@ while True:
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==2 and nLegno>0:
                                 nLegno-=1
-                                LegnoSuono.play()
+                                choice = random.choice(LegnoSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==3 and nPietra>0:
                                 nPietra-=1
-                                PietraSuono.play()
+                                choice = random.choice(PietraSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==4 and nErba>0:
                                 nErba-=1
-                                ErbaSuono.play()
+                                choice = random.choice(ErbaSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==5 and nTerra>0:
                                 nTerra-=1
@@ -809,11 +831,13 @@ while True:
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==6 and nOakPlanks>0:
                                 nOakPlanks-=1
-                                LegnoSuono.play()
+                                choice = random.choice(LegnoSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==7 and nScale>0:
                                 nScale-=1
-                                LegnoSuono.play()
+                                choice = random.choice(LegnoSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==8 and nSaplings>0:
                                 for blocco in Mondo.blocchi:
@@ -957,6 +981,7 @@ while True:
 
         if Sfondo.notte==True and fantasmaLim>fantasmaPres:
             Fantasma.append(fantasmaSpawn())
+            #aggiungi audio fantasma
             fantasmaPres+=1
 
         if fantasmaPres>0:
@@ -968,11 +993,13 @@ while True:
                 if player.rect.collidepoint(entita.rect.topleft) or player.rect.collidepoint(entita.rect.bottomleft) or player.rect.collidepoint(entita.rect.topright) or player.rect.collidepoint(entita.rect.bottomright):
                     danno+=2
                     dannoSuono.play()
+                    Fantasmarisata.play()
                     fantasmaPres-=1
                     Fantasma.pop(i)
                 if ProPres==True:
                     if entita.rect.collidepoint(Proiettile.rect.center):
                         fantasmaPres-=1
+                        FantasmaSuono.play()
                         Fantasma.pop(i)
 
                 i=i+1
