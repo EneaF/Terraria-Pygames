@@ -1,5 +1,8 @@
 import pygame, sys, math, random
 from math import sqrt
+from math import sin
+from math import cos
+from math import atan
 from pygame.locals import *
 from personaggio import Personaggio
 from Mondo import MondoClass
@@ -7,6 +10,8 @@ from Inventario_Rapido import Inventario
 from Riquadri import RiqScritto
 from HP import VitaClass
 from Sfondo import SfondoClass
+from fantasma import FantasmaClass
+from proiettile import ProiettileClass
 
 
 pygame.init()
@@ -66,8 +71,6 @@ vita.append(vitaTmp)
 clock = pygame.time.Clock()
 fps = 60
 
-
-
 sizeInventario=(60,60)
 
 box1=Inventario((300,25), sizeInventario, screen)
@@ -78,6 +81,10 @@ box5=Inventario((540,25), sizeInventario, screen)
 box6=Inventario((600,25), sizeInventario, screen)
 box7=Inventario((660,25), sizeInventario, screen)
 box8=Inventario((720,25), sizeInventario, screen)
+box9=Inventario((780,25), sizeInventario, screen)
+
+
+
 
 
 
@@ -345,6 +352,41 @@ def disegnaYouDied():
     Respawn.draw()
     TitleScreen.draw()
 
+def fantasmaSpawn():
+    lato=random.randint(0,3)
+    if lato==0:
+        X=-50
+        Y=random.randint(0,700)
+    elif lato==1:
+        X=random.randint(0,1000)
+        Y=700
+    elif lato==2:
+        X=1000
+        Y=random.randint(0,700)
+    else:
+        X=random.randint(0,1000)
+        Y=-50
+    Fantasma=FantasmaClass((X,Y),(50,50),screen)
+    return Fantasma
+
+def fantasmaMove(fantasma,player):
+    if (fantasma.rect.centerx-player.rect.centerx)==0:
+        velFantasmax=0
+        velFantasmay=fantasma.Vel
+    else:
+        m=(fantasma.rect.centery-player.rect.centery)/(fantasma.rect.centerx-player.rect.centerx)
+        ang=atan(m)
+        velFantasmax=fantasma.Vel*cos(ang)
+        velFantasmay=fantasma.Vel*sin(ang)
+    
+        if fantasma.rect.left>player.rect.left:
+            velFantasmax*=-1
+            velFantasmay*=-1
+    fantasma.muovi(velFantasmax,velFantasmay)
+
+def ProiettileSpara(X,Y):
+    Proiettile=ProiettileClass((X,Y),(5,5),screen)
+    return Proiettile
 
 Soundtrack=["Sounds/MainTheme/Soundtrack (1).mp3","Sounds/MainTheme/Soundtrack (2).mp3",
             "Sounds/MainTheme/Soundtrack (3).mp3","Sounds/MainTheme/Soundtrack (4).mp3",
@@ -377,6 +419,11 @@ fase=1
 regen=0
 tempo=0
 F3=False
+fantasmaPres=0
+fantasmaLim=0
+Fantasma=[]
+cooldown=0
+ProPres=False
 while True:
     if fase==1:
         
@@ -608,72 +655,94 @@ while True:
                     lum=7
                 if box8.rectBox.collidepoint(pos):
                     lum=8
+                if box9.rectBox.collidepoint(pos):
+                    lum=9
+                    cooldown=0
+                
+                if lum==9 :
+                    if cooldown==7:
+                        cooldown=0
+                        ProPres=True
+                        Proiettile=ProiettileSpara(player.rect.centerx,player.rect.centery)
+                        if (pos[0]-player.rect.centerx)==0:
+                            velProX=0
+                            velProY=Proiettile.vel
+                            
+                        else:
+                            m=(pos[1]-player.rect.centery)/(pos[0]-player.rect.centerx)
+                            ang=atan(m)
+                            velProX=Proiettile.vel*sin(ang)
+                            velProY=Proiettile.vel*cos(ang)
+                        
+                        if pos[0]<player.rect.centerx:
+                            velProX*=-1
+                            velProY*=-1
+                else:
+                    for blocco in Mondo.blocchi:
+                        rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
+                        if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
+                            if rectTmp.collidepoint(pos):
+                                if blocco[2]=="E" and nErba<999:
+                                    nErba+=1
+                                    ErbaSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="T" and nTerra<999:
+                                    nTerra+=1
+                                    TerraSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="P" and nPietra<999:
+                                    nPietra+=1
+                                    PietraSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="F" and nFoglie<999:
+                                    nFoglie+=1
+                                    FoglieSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="L" and nLegno<999:
+                                    nLegno+=1
+                                    LegnoSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="O" and nOakPlanks<999:
+                                    nOakPlanks+=1
+                                    LegnoSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
-                for blocco in Mondo.blocchi:
-                    rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
-                    if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
-                        if rectTmp.collidepoint(pos):
-                            if blocco[2]=="E" and nErba<999:
-                                nErba+=1
-                                ErbaSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="T" and nTerra<999:
-                                nTerra+=1
-                                TerraSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="P" and nPietra<999:
-                                nPietra+=1
-                                PietraSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="F" and nFoglie<999:
-                                nFoglie+=1
-                                FoglieSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="L" and nLegno<999:
-                                nLegno+=1
-                                LegnoSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="O" and nOakPlanks<999:
-                                nOakPlanks+=1
-                                LegnoSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-
-                for blocco in Mondo.blocchiDietro:
-                    rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
-                    if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
-                        if rectTmp.collidepoint(pos):
-                            if blocco[2]=="e" and nErba<999:
-                                nErba+=1
-                                ErbaSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="t" and nTerra<999:
-                                nTerra+=1
-                                TerraSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="p" and nPietra<999:
-                                nPietra+=1
-                                PietraSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="f" and nFoglie<999:
-                                nFoglie+=1
-                                FoglieSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="l" and nLegno<999:
-                                nLegno+=1
-                                LegnoSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="o" and nOakPlanks<999:
-                                nOakPlanks+=1
-                                LegnoSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="s" and nScale<999:
-                                nScale+=1
-                                LegnoSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
-                            elif blocco[2]=="S" and nSaplings<999:
-                                nSaplings+=1
-                                FoglieSuono.play()
-                                Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                    for blocco in Mondo.blocchiDietro:
+                        rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
+                        if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
+                            if rectTmp.collidepoint(pos):
+                                if blocco[2]=="e" and nErba<999:
+                                    nErba+=1
+                                    ErbaSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="t" and nTerra<999:
+                                    nTerra+=1
+                                    TerraSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="p" and nPietra<999:
+                                    nPietra+=1
+                                    PietraSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="f" and nFoglie<999:
+                                    nFoglie+=1
+                                    FoglieSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="l" and nLegno<999:
+                                    nLegno+=1
+                                    LegnoSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="o" and nOakPlanks<999:
+                                    nOakPlanks+=1
+                                    LegnoSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="s" and nScale<999:
+                                    nScale+=1
+                                    LegnoSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="S" and nSaplings<999:
+                                    nSaplings+=1
+                                    FoglieSuono.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
             if event.type == MOUSEBUTTONDOWN and event.button==3:
                 pos=pygame.mouse.get_pos()
@@ -760,13 +829,17 @@ while True:
                         nSaplings+=1
 
                 if event.key==pygame.K_e:
-                    if lum==8:
+                    if lum==9:
                         lum=1
+                    elif lum==8:
+                        lum=9
+                        cooldown=0
                     else:
                         lum=lum+1
                 if event.key==pygame.K_q:
                     if lum==1:
-                        lum=8
+                        lum=9
+                        cooldown=0
                     else:
                         lum=lum-1
                 
@@ -818,6 +891,9 @@ while True:
             lum=7
         if keys[K_8]:
             lum=8
+        if keys[K_9]:
+            lum=9
+            cooldown=0
 
         if keys[K_ESCAPE]:
             fase=1
@@ -863,25 +939,48 @@ while True:
         box6.draw(6,nOakPlanks)
         box7.draw(7,nScale)
         box8.draw(8,nSaplings)
+        box9.draw(9,"")
 
         player.calcolaVelMax()
         if caduto==True and player.velMax>=11.8:
             danno+=dannoDaCaduta(player)
             player.velMax=0
             dannoSuono.play()
+
+        if Sfondo.notte==True and fantasmaLim>fantasmaPres:
+            Fantasma.append(fantasmaSpawn())
+            fantasmaPres+=1
+
+        if fantasmaPres>0:
+            i=0
+            for entita in Fantasma:
+                
+                fantasmaMove(entita,player)
+                entita.draw()
+                if player.rect.collidepoint(entita.rect.topleft) or player.rect.collidepoint(entita.rect.bottomleft) or player.rect.collidepoint(entita.rect.topright) or player.rect.collidepoint(entita.rect.bottomright):
+                    danno+=2
+                    dannoSuono.play()
+                    fantasmaPres-=1
+                    Fantasma.pop(i)
+                if ProPres==True:
+                    if entita.rect.collidepoint(Proiettile.rect.center):
+                        fantasmaPres-=1
+                        Fantasma.pop(i)
+
+                i=i+1
+
         if regen >= 300 and vitaTot < 10:
             vitaTot+=1
             regen = 0
         
         if vitaTot==0:
-            print("ciao0")
             pygame.mixer.music.stop()
             fase=4
             YouDiedSuono.play()
             pygame.mixer.music.load("Sounds/MainTheme/YouDiedMusic.mp3")
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(-1)
-            print("ciao")
+
         vitaTot-=danno
         if vitaTot<0:
             vitaTot=0
@@ -901,6 +1000,32 @@ while True:
         for cuore in vita:
             cuore[0].draw(cuore[1])
 
+        if ProPres:
+            Proiettile.muovi(velProX,velProY)
+            if Proiettile.rect.centerx>1000 or Proiettile.rect.centerx<0 or Proiettile.rect.centery>700 or Proiettile.rect.centery<0:
+                ProPres=False
+            Proiettile.draw()
+        
+        
+        if F3:
+            FpsF3.drawNormal(str(round(clock.get_fps())))
+            NdayF3.drawNormal(str(nDay))
+            PosXMF3.drawNormal(str(round(posMondox)))
+            PosYMF3.drawNormal(str(round(posMondoy)))
+            PosXPF3.drawNormal(str(round(player.rect.left)))
+            PosYPF3.drawNormal(str(round(player.rect.bottom)))
+
+        player.muovi()
+        player.draw()
+        if Sfondo.notte==True and nDay1<nDay:
+            nDay1=nDay
+            fantasmaLim=int(round(nDay/2))
+        elif Sfondo.notte==False and nDay1==nDay:
+            nDay=nDay1+1
+        
+        if tempo%7==0 and cooldown<7:
+            cooldown+=1
+
         if lum==1:
             box1.draw(1,nFoglie,True)
         elif lum==2:
@@ -917,22 +1042,11 @@ while True:
             box7.draw(7,nScale,True)
         elif lum==8:
             box8.draw(8,nSaplings,True)
+        elif lum==9:
+            box9.draw(9,"",True,cooldown)
         
-        if F3:
-            FpsF3.drawNormal(str(round(clock.get_fps())))
-            NdayF3.drawNormal(str(nDay))
-            PosXMF3.drawNormal(str(round(posMondox)))
-            PosYMF3.drawNormal(str(round(posMondoy)))
-            PosXPF3.drawNormal(str(round(player.rect.left)))
-            PosYPF3.drawNormal(str(round(player.rect.bottom)))
-
-        player.muovi()
-        player.draw()
-        if Sfondo.notte==True and nDay1==nDay:
-            nDay=nDay1+1
-        elif Sfondo.notte==False and nDay1<nDay:
-            nDay1=nDay
-
+        
+        
     tempo+=1
     pygame.display.update()
     clock.tick(fps)

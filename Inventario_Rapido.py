@@ -18,6 +18,24 @@ class Inventario():
         self.Boxinventario = pygame.transform.scale(self.Boxinventario,self.sizeBlocco)
         self.BoxinventarioSel = pygame.transform.scale(self.BoxinventarioSel,self.sizeBlocco)
 
+        self.BoxinventarioSelC1=pygame.image.load("images/BoxInventarioSelezionatoC1.png")
+        self.BoxinventarioSelC2=pygame.image.load("images/BoxInventarioSelezionatoC2.png")
+        self.BoxinventarioSelC3=pygame.image.load("images/BoxInventarioSelezionatoC3.png")
+        self.BoxinventarioSelC4=pygame.image.load("images/BoxInventarioSelezionatoC4.png")
+        self.BoxinventarioSelC5=pygame.image.load("images/BoxInventarioSelezionatoC5.png")
+        self.BoxinventarioSelC6=pygame.image.load("images/BoxInventarioSelezionatoC6.png")
+        self.BoxinventarioSelC7=pygame.image.load("images/BoxInventarioSelezionatoC7.png")
+
+        self.BoxinventarioSelC1 = pygame.transform.scale(self.BoxinventarioSelC1,self.sizeBlocco)
+        self.BoxinventarioSelC2 = pygame.transform.scale(self.BoxinventarioSelC2,self.sizeBlocco)
+        self.BoxinventarioSelC3 = pygame.transform.scale(self.BoxinventarioSelC3,self.sizeBlocco)
+        self.BoxinventarioSelC4 = pygame.transform.scale(self.BoxinventarioSelC4,self.sizeBlocco)
+        self.BoxinventarioSelC5 = pygame.transform.scale(self.BoxinventarioSelC5,self.sizeBlocco)
+        self.BoxinventarioSelC6 = pygame.transform.scale(self.BoxinventarioSelC6,self.sizeBlocco)
+        self.BoxinventarioSelC7 = pygame.transform.scale(self.BoxinventarioSelC7,self.sizeBlocco)
+
+
+
         self.foglia = pygame.image.load("images/FoglieTrsp.png")
         self.legno = pygame.image.load("images/Legno.jpeg")
         self.pietra = pygame.image.load("images/Stone.jpeg")
@@ -26,6 +44,7 @@ class Inventario():
         self.oakPlanks = pygame.image.load("images/oakPlanks.png")
         self.scala = pygame.image.load("images/Ladder.png")
         self.sapling = pygame.image.load("images/sapling.png")
+        self.pistola = pygame.image.load("images/pistola.png")
 
         self.foglia = pygame.transform.scale(self.foglia,self.sizeItem)
         self.legno = pygame.transform.scale(self.legno,self.sizeItem)
@@ -35,13 +54,29 @@ class Inventario():
         self.oakPlanks = pygame.transform.scale(self.oakPlanks,self.sizeItem)
         self.scala = pygame.transform.scale(self.scala,self.sizeItem)
         self.sapling = pygame.transform.scale(self.sapling,self.sizeItem)
+        self.pistola = pygame.transform.scale(self.pistola,self.sizeItem)
 
-    def draw(self,blocco,qta=0,sel=False):
+    def draw(self,blocco,qta=0,sel=False,cooldown=None):
         qta=str(qta)
         if sel==False:
             selezionato=self.Boxinventario
         else:
             selezionato=self.BoxinventarioSel
+        
+        if cooldown==7:
+            selezionato=self.BoxinventarioSelC7
+        elif cooldown==1:
+            selezionato=self.BoxinventarioSelC6
+        elif cooldown==2:
+            selezionato=self.BoxinventarioSelC5
+        elif cooldown==3:
+            selezionato=self.BoxinventarioSelC4
+        elif cooldown==4:
+            selezionato=self.BoxinventarioSelC3
+        elif cooldown==5:
+            selezionato=self.BoxinventarioSelC2
+        elif cooldown==6:
+            selezionato=self.BoxinventarioSelC1
         
         if blocco==1:
             bloccoDisplay=self.foglia
@@ -59,6 +94,8 @@ class Inventario():
             bloccoDisplay=self.scala
         elif blocco==8:
             bloccoDisplay=self.sapling
+        elif blocco==9:
+            bloccoDisplay=self.pistola
         
         carattere = pygame.font.Font(None,int(self.size[0]/10*5))
         scritta = carattere.render(qta,True,(50,50,50))
