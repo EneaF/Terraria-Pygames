@@ -16,3 +16,5 @@ nDay
 nDay1
 Diff
 DayNight
+nDiamante
+nFerro

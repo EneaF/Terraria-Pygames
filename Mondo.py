@@ -1,4 +1,4 @@
-import pygame
+import pygame,random
 from pygame.locals import *
 
 class MondoClass():
@@ -20,6 +20,8 @@ class MondoClass():
         self.terra = pygame.image.load("images/Terra.jpeg")
         self.bedrock = pygame.image.load("images/bedrock.png")
         self.oakPlanks = pygame.image.load("images/oakPlanks.png")
+        self.ferro = pygame.image.load("images/ferro.png")
+        self.diamante = pygame.image.load("images/diamante.png")
         
 
         self.fogliaDietro = pygame.image.load("images/FoglieTrspDietro.png")
@@ -38,6 +40,8 @@ class MondoClass():
         self.terra = pygame.transform.scale(self.terra,self.sizeBlocco)
         self.bedrock = pygame.transform.scale(self.bedrock,self.sizeBlocco)
         self.oakPlanks = pygame.transform.scale(self.oakPlanks,self.sizeBlocco)
+        self.ferro = pygame.transform.scale(self.ferro,self.sizeBlocco)
+        self.diamante = pygame.transform.scale(self.diamante,self.sizeBlocco)
 
         self.fogliaDietro = pygame.transform.scale(self.fogliaDietro,self.sizeBlocco)
         self.legnoDietro = pygame.transform.scale(self.legnoDietro,self.sizeBlocco)
@@ -155,7 +159,6 @@ class MondoClass():
         self.blocchiDietro=[]
         self.scale=[]
         
-
     def AggiungiBloccoDietro(self,posMondox,posMondoy,BloccoAria,lum):
         posizy=posMondoy
         with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
@@ -305,4 +308,14 @@ class MondoClass():
                         self.screen.blit(self.sapling,((posizx,posizy),(self.sizeBlocco)))
                         if (posizx,posizy,el) not in self.blocchiDietro:
                             self.blocchiDietro.append((posizx,posizy,el))
+                    elif el=="I":
+                        self.screen.blit(self.ferro,((posizx,posizy),(self.sizeBlocco)))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy,el) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy,el))
+                    elif el=="D":
+                        self.screen.blit(self.diamante,((posizx,posizy),(self.sizeBlocco)))
+                        if posizx>=0 and posizy>=0 and posizx<=1000 and posizy<=700:
+                            if (posizx,posizy,el) not in self.blocchi:
+                                self.blocchi.append((posizx,posizy,el))
          

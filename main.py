@@ -13,7 +13,6 @@ from Sfondo import SfondoClass
 from fantasma import FantasmaClass
 from proiettile import ProiettileClass
 
-#TI PREGO DIMMI CHE SEI LA VERSIONE GIUSTA!
 
 pygame.init()
 
@@ -57,6 +56,8 @@ PosYMF3=RiqScritto(screen,(150,160),(100,100),"YM: ")
 PosXPF3=RiqScritto(screen,(50,190),(100,100),"XP: ")
 PosYPF3=RiqScritto(screen,(150,190),(100,100),"YP: ")
 DiffF3=RiqScritto(screen,(50,220),(100,100),"Diff: ")
+nDiamanteF3=RiqScritto(screen,(50,250),(100,100),"Diamanti: ")
+nFerroF3=RiqScritto(screen,(50,280),(100,100),"Ferro: ")
 
 Respawn=RiqScritto(screen, (25,600), sizeYouDied,"Respawn")
 TitleScreen=RiqScritto(screen,(525,600), sizeYouDied,"Title Screen")
@@ -219,8 +220,53 @@ def CaricaMondo(nomeMondo,saveFile):
     f.close()
     return dati
 
+def GeneraMinerali():
+    nFerroo=0
+    nDiamante=0
+    with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
+        tutto=[]
+        for riga in f:
+            tutto.append(riga)
+        
+        tmp=[]
+        while nDiamante<5 and nFerroo<10:
+            for riga in tutto:
+                riga=riga.strip().split()
+                for i in range(len(riga)):
+                    if riga[i]=="P" and nFerroo<10:
+                        estr=random.randint(0,500)
+                        if estr==1:
+                            riga[i]="I"
+                            nFerroo+=1
+                    if  riga[i]=="P" and nDiamante<5:
+                        estr=random.randint(0,100)
+                        if estr==1:
+                            riga[i]="D"
+                            nDiamante+=1
+                        
+                riga=str(riga)
+                tmp.append(riga)
+            
+
+    f.close()
+
+    with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
+        f.truncate()
+        
+
+    f1 = open("FileTXT/Mondo.txt","a",encoding="utf-8")
+        
+    for riga in tmp:
+        riga=riga.strip('[]",')
+        riga=riga.strip("'")
+        riga=riga.replace("', '"," ")
+            
+        f1.write(riga)
+        f1.write("\n")
+    f1.close()
+
 def CreaMondo(nomeMondo,saveFile,tipo):
-    if tipo==0:
+    if tipo==1:
         f=open("FileTXT/MondoOriginale.txt","r+")
         f1=open("fileTXT/Mondo.txt","w")
         f1.truncate()
@@ -229,7 +275,7 @@ def CreaMondo(nomeMondo,saveFile,tipo):
         f.close()
         f1.close()
 
-    elif tipo==1:
+    elif tipo==2:
         f=open("FileTXT/MondoOriginaleLarge.txt","r+")
         f1=open("fileTXT/Mondo.txt","w")
         f1.truncate()
@@ -237,6 +283,8 @@ def CreaMondo(nomeMondo,saveFile,tipo):
             f1.write(riga)
         f.close()
         f1.close()
+
+    GeneraMinerali()
 
     f=open("fileTXT/Mondo.txt","r+")
     f1=open(nomeMondo,"w")
@@ -497,6 +545,8 @@ while True:
             Sfondo.notte=True
         else:
             Sfondo.notte=False
+        nDiamante=dati[18]
+        nFerro=dati[19]
         Mondo.blocchi=[]
         Mondo.blocchiAria=[]
         Mondo.blocchiDietro=[]
@@ -611,6 +661,8 @@ while True:
                         dati.append(0)
                     else:
                         dati.append(1)
+                    dati.append(nDiamante)
+                    dati.append(nFerro)
                     SalvaDati(dati,nomeSalvataggio,nomeMondo)
                     Diff=None
 
@@ -645,6 +697,8 @@ while True:
                 dati.append(0)
             else:
                 dati.append(1)
+            dati.append(nDiamante)
+            dati.append(nFerro)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
             Fantasma=[]
             fantasmaPres=0
@@ -773,6 +827,16 @@ while True:
                                 elif blocco[2]=="O" and nOakPlanks<999:
                                     nOakPlanks+=1
                                     choice = random.choice(LegnoSuono)
+                                    choice.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="I":
+                                    nFerro+=1
+                                    choice = random.choice(PietraSuono)
+                                    choice.play()
+                                    Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                                elif blocco[2]=="D":
+                                    nDiamante+=1
+                                    choice = random.choice(PietraSuono)
                                     choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
@@ -1002,6 +1066,8 @@ while True:
                 dati.append(0)
             else:
                 dati.append(1)
+            dati.append(nDiamante)
+            dati.append(nFerro)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
             Diff=None
 
@@ -1109,6 +1175,8 @@ while True:
             PosXPF3.drawNormal(str(round(player.rect.left)))
             PosYPF3.drawNormal(str(round(player.rect.bottom)))
             DiffF3.drawNormal(str(Diff))
+            nDiamanteF3.drawNormal(str(nDiamante))
+            nFerroF3.drawNormal(str(nFerro))
 
         player.muovi()
         player.draw()
