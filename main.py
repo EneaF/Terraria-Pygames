@@ -13,6 +13,7 @@ from Sfondo import SfondoClass
 from fantasma import FantasmaClass
 from proiettile import ProiettileClass
 
+#TI PREGO DIMMI CHE SEI LA VERSIONE GIUSTA!
 
 pygame.init()
 
