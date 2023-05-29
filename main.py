@@ -221,7 +221,7 @@ def CaricaMondo(nomeMondo,saveFile):
     return dati
 
 def GeneraMinerali():
-    nFerroo=0
+    nFerro=0
     nDiamante=0
     with open("FileTXT/Mondo.txt","r+",encoding="utf-8") as f:
         tutto=[]
@@ -229,24 +229,29 @@ def GeneraMinerali():
             tutto.append(riga)
         
         tmp=[]
-        while nDiamante<5 and nFerroo<10:
+        while True:
             for riga in tutto:
                 riga=riga.strip().split()
                 for i in range(len(riga)):
-                    if riga[i]=="P" and nFerroo<10:
-                        estr=random.randint(0,500)
+                    if riga[i]=="P" and nFerro<12:
+                        estr=random.randint(0,170)
                         if estr==1:
                             riga[i]="I"
-                            nFerroo+=1
+                            nFerro+=1
                     if  riga[i]=="P" and nDiamante<5:
-                        estr=random.randint(0,100)
+                        estr=random.randint(0,170)
                         if estr==1:
                             riga[i]="D"
                             nDiamante+=1
-                        
                 riga=str(riga)
                 tmp.append(riga)
-            
+            if nDiamante==5 and nFerro==12:
+                break
+            else:
+                nDiamante=0
+                nFerro=0
+                tmp=[]
+              
 
     f.close()
 
@@ -471,8 +476,9 @@ F3=False
 fantasmaPres=0
 fantasmaLim=0
 Fantasma=[]
+Proiettile=[]
 cooldown=0
-ProPres=False
+ProPres=0
 tipo=1
 Diff=None
 FantasmaSpeed=1
@@ -780,22 +786,25 @@ while True:
                 if lum==9 :
                     if cooldown==7:
                         cooldown=0
-                        ProPres=True
-                        Proiettile=ProiettileSpara(player.rect.centerx,player.rect.centery)
+                        ProPres+=1
+                        Proiettile.append(ProiettileSpara(player.rect.centerx,player.rect.centery))
                         SparoSuono.play()
                         if (pos[0]-player.rect.centerx)==0:
                             velProX=0
-                            velProY=Proiettile.vel
+                            velProY=Proiettile[-1].vel
                             
                         else:
                             m=(pos[1]-player.rect.centery)/(pos[0]-player.rect.centerx)
                             ang=atan(m)
-                            velProX=Proiettile.vel*sin(ang)
-                            velProY=Proiettile.vel*cos(ang)
+                            velProX=Proiettile[-1].vel*sin(ang)
+                            velProY=Proiettile[-1].vel*cos(ang)
                         
                         if pos[0]<player.rect.centerx:
                             velProX*=-1
                             velProY*=-1
+                        
+                        Proiettile[-1].velX=velProX
+                        Proiettile[-1].velY=velProY
                 else:
                     for blocco in Mondo.blocchi:
                         rectTmp=pygame.Rect((blocco[0],blocco[1]),(50,50))
@@ -1121,11 +1130,12 @@ while True:
                     Fantasmarisata.play()
                     fantasmaPres-=1
                     Fantasma.pop(i)
-                if ProPres==True:
-                    if entita.rect.collidepoint(Proiettile.rect.center):
-                        fantasmaPres-=1
-                        FantasmaSuono.play()
-                        Fantasma.pop(i)
+                if ProPres>0:
+                    for proiettile in Proiettile:
+                        if entita.rect.collidepoint(proiettile.rect.center):
+                            fantasmaPres-=1
+                            FantasmaSuono.play()
+                            Fantasma.pop(i)
 
                 i=i+1
 
@@ -1160,11 +1170,15 @@ while True:
         for cuore in vita:
             cuore[0].draw(cuore[1])
 
-        if ProPres:
-            Proiettile.muovi(velProX,velProY)
-            if Proiettile.rect.centerx>1000 or Proiettile.rect.centerx<0 or Proiettile.rect.centery>700 or Proiettile.rect.centery<0:
-                ProPres=False
-            Proiettile.draw()
+        if ProPres>0:
+            i=0
+            for proiettile in Proiettile:
+                proiettile.muovi()
+                if proiettile.rect.centerx>1000 or proiettile.rect.centerx<0 or proiettile.rect.centery>700 or proiettile.rect.centery<0:
+                    ProPres-=1
+                    Proiettile.pop(i)
+                proiettile.draw()
+                i+=1
         
         
         if F3:
@@ -1188,7 +1202,18 @@ while True:
         if Sfondo.notte==True:
             fantasmaLim=int(round(nDay/2))
         
-        if tempo%7==0 and cooldown<7:
+        if nFerro<3:
+            CoolDownTime=9
+        elif nFerro<6:
+            CoolDownTime=8
+        elif nFerro<9:
+            CoolDownTime=7
+        elif nFerro<12:
+            CoolDownTime=6
+        else:
+            CoolDownTime=5
+
+        if tempo%CoolDownTime==0 and cooldown<7:
             cooldown+=1
 
         if lum==1:
