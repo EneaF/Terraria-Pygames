@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 class FantasmaClass():
-    def __init__(self,pos,size,screen,Vel=2):
+    def __init__(self,pos,size,screen):
         self.screen=screen
         self.pos=pos
         self.size=size
@@ -15,7 +15,7 @@ class FantasmaClass():
 
         self.image=self.fantasmaSx
 
-        self.Vel = Vel
+        self.Vel = 2
 
     def muovi(self,velx,vely):
         self.rect.left+=velx

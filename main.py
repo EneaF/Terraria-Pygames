@@ -33,19 +33,16 @@ Mondo = MondoClass((0,0), sizeWindow, screen,[-40,-50])
 sizeMondi=(450,100)
 sizeReset=(150,100)
 sizeYouDied=(450,75)
-sizeCreaMondi=(300,100)
 
 Mondo1=RiqScritto(screen, (100,200), sizeMondi, "MONDO 1")
 Mondo2=RiqScritto(screen, (100,325), sizeMondi, "MONDO 2")
 Mondo3=RiqScritto(screen, (100,450), sizeMondi, "MONDO 3")
-CreaMondo1=RiqScritto(screen,(600,200),sizeCreaMondi, "Crea Mondo 1")
-CreaMondo2=RiqScritto(screen,(600,325),sizeCreaMondi, "Crea Mondo 2")
-CreaMondo3=RiqScritto(screen,(600,450),sizeCreaMondi, "Crea Mondo 3")
-MondoSize=RiqScritto(screen, (500,200),sizeCreaMondi, "Piccola")
-Difficulty=RiqScritto(screen,(500,350),sizeCreaMondi, "Pacifica")
-MondoSizeScritta=RiqScritto(screen, (150,230),sizeCreaMondi, "")
-DifficultyScritta=RiqScritto(screen, (150,380),sizeCreaMondi, "")
-CreaMondoTasto=RiqScritto(screen, (300,575), (400,100), "Crea Mondo")
+Reset1S=RiqScritto(screen, (600,200), sizeReset, "Map S")
+Reset1L=RiqScritto(screen, (800,200), sizeReset, "Map L")
+Reset2S=RiqScritto(screen, (600,325), sizeReset, "Map S")
+Reset2L=RiqScritto(screen, (800,325), sizeReset, "Map L")
+Reset3S=RiqScritto(screen, (600,450), sizeReset, "Map S")
+Reset3L=RiqScritto(screen, (800,450), sizeReset, "Map L")
 
 QUITButton=RiqScritto(screen, (400,575), (200,100), "QUIT")
 
@@ -55,7 +52,6 @@ PosXMF3=RiqScritto(screen,(50,160),(100,100),"XM:")
 PosYMF3=RiqScritto(screen,(150,160),(100,100),"YM: ")
 PosXPF3=RiqScritto(screen,(50,190),(100,100),"XP: ")
 PosYPF3=RiqScritto(screen,(150,190),(100,100),"YP: ")
-DiffF3=RiqScritto(screen,(50,220),(100,100),"Diff: ")
 
 Respawn=RiqScritto(screen, (25,600), sizeYouDied,"Respawn")
 TitleScreen=RiqScritto(screen,(525,600), sizeYouDied,"Title Screen")
@@ -182,9 +178,12 @@ def DisegnaMenu():
     Mondo1.draw()
     Mondo2.draw()
     Mondo3.draw()
-    CreaMondo1.draw()
-    CreaMondo2.draw()
-    CreaMondo3.draw()
+    Reset1L.draw()
+    Reset1S.draw()
+    Reset2L.draw()
+    Reset2S.draw()
+    Reset3L.draw()
+    Reset3S.draw()
     QUITButton.draw()
     pos=pygame.mouse.get_pos()
     if Mondo1.rect.collidepoint(pos):
@@ -193,12 +192,18 @@ def DisegnaMenu():
         Mondo2.draw(0,1)
     if Mondo3.rect.collidepoint(pos):
         Mondo3.draw(0,1)
-    if CreaMondo1.rect.collidepoint(pos):
-        CreaMondo1.draw(0,1)
-    if CreaMondo2.rect.collidepoint(pos):
-        CreaMondo2.draw(0,1)
-    if CreaMondo3.rect.collidepoint(pos):
-        CreaMondo3.draw(0,1)
+    if Reset1L.rect.collidepoint(pos):
+        Reset1L.draw(0,1)
+    if Reset1S.rect.collidepoint(pos):
+        Reset1S.draw(0,1)
+    if Reset2L.rect.collidepoint(pos):
+        Reset2L.draw(0,1)
+    if Reset3L.rect.collidepoint(pos):
+        Reset3L.draw(0,1)
+    if Reset2S.rect.collidepoint(pos):
+        Reset2S.draw(0,1)
+    if Reset3S.rect.collidepoint(pos):
+        Reset3S.draw(0,1)
     if QUITButton.rect.collidepoint(pos):
         QUITButton.draw(0,1)
 
@@ -347,7 +352,7 @@ def disegnaYouDied():
     Respawn.draw()
     TitleScreen.draw()
 
-def fantasmaSpawn(Velocita):
+def fantasmaSpawn():
     lato=random.randint(0,3)
     if lato==0:
         X=-50
@@ -361,7 +366,7 @@ def fantasmaSpawn(Velocita):
     else:
         X=random.randint(0,1000)
         Y=-50
-    Fantasma=FantasmaClass((X,Y),(50,50),screen,Velocita)
+    Fantasma=FantasmaClass((X,Y),(50,50),screen)
     return Fantasma
 
 def fantasmaMove(fantasma,player):
@@ -404,15 +409,14 @@ pygame.mixer.music.play(-1)
 LegnoSuono = [pygame.mixer.Sound("Sounds/WoodBreak.mp3"),pygame.mixer.Sound("Sounds/Woodplacing2.mp3"),pygame.mixer.Sound("Sounds/Woodplacing3.mp3")]
 ErbaSuono=[pygame.mixer.Sound("Sounds/GrassBreak.mp3"),pygame.mixer.Sound("Sounds/GrassBreak2.mp3"),pygame.mixer.Sound("Sounds/Grassbreak3.mp3"),pygame.mixer.Sound("Sounds/Grassbreak4.mp3")]
 PietraSuono=[pygame.mixer.Sound("Sounds/StoneBreak.mp3"),pygame.mixer.Sound("Sounds/StoneBreak2.mp3"),pygame.mixer.Sound("Sounds/StoneBreak3.mp3")]
+TerraSuono = [pygame.mixer.Sound("Sounds/Dirt_1.mp3"),pygame.mixer.Sound("Sounds/Dirt_2.mp3"),pygame.mixer.Sound("Sounds/Dirt_3.mp3"),pygame.mixer.Sound("Sounds/Dirtbreak.mp3")]
+FoglieSuono = [pygame.mixer.Sound("Sounds/foglie.mp3"),pygame.mixer.Sound("Sounds/Leaf_1.mp3"),pygame.mixer.Sound("Sounds/Leaf_2.mp3"),pygame.mixer.Sound("Sounds/Leaf_3.mp3")]
 dannoSuono=pygame.mixer.Sound("Sounds/Damage.mp3")
-FoglieSuono=pygame.mixer.Sound("Sounds/foglie.mp3")
-TerraSuono=pygame.mixer.Sound("Sounds/DirtBreak.mp3")
 RespawnSuono=pygame.mixer.Sound("Sounds/Respawn.mp3")
 YouDiedSuono=pygame.mixer.Sound("Sounds/YouDiedSound.mp3")
 SparoSuono=pygame.mixer.Sound("Sounds/Gunshot.mp3")
 FantasmaSuono=pygame.mixer.Sound("Sounds/Ghostdeath.mp3")
 Fantasmarisata=pygame.mixer.Sound("Sounds/Ghostlaugh.mp3")
-SparoSuono.set_volume(0.1)
 
 lum=0
 fase=1
@@ -424,9 +428,6 @@ fantasmaLim=0
 Fantasma=[]
 cooldown=0
 ProPres=False
-tipo=1
-Diff=None
-FantasmaSpeed=1
 while True:
     if fase==1:
         
@@ -457,103 +458,68 @@ while True:
                     nomeMondo="FileTXT/Mondo3.txt"
                     dati= CaricaMondo(nomeMondo,nomeSalvataggio)
                     fase=3
-                
-                if CreaMondo1.rect.collidepoint(pos):
+                if Reset1L.rect.collidepoint(pos):
                     nomeMondo="FileTXT/Mondo1.txt"
                     nomeSalvataggio="FileTXT/salvataggio1.txt"
-                    fase=5
-                    Diff=0
-                if CreaMondo2.rect.collidepoint(pos):
+                    dati=CreaMondo(nomeMondo,nomeSalvataggio,1)
+
+                if Reset1S.rect.collidepoint(pos):
+                    nomeMondo="FileTXT/Mondo1.txt"
+                    nomeSalvataggio="FileTXT/salvataggio1.txt"
+                    dati=CreaMondo(nomeMondo,nomeSalvataggio,0)
+
+                if Reset2L.rect.collidepoint(pos):
                     nomeMondo="FileTXT/Mondo2.txt"
                     nomeSalvataggio="FileTXT/salvataggio2.txt"
-                    fase=5
-                    Diff=0
-                if CreaMondo3.rect.collidepoint(pos):
+                    dati=CreaMondo(nomeMondo,nomeSalvataggio,1)
+
+                if Reset2S.rect.collidepoint(pos):
+                    nomeMondo="FileTXT/Mondo2.txt"
+                    nomeSalvataggio="FileTXT/salvataggio2.txt"
+                    dati=CreaMondo(nomeMondo,nomeSalvataggio,0)
+
+                if Reset3L.rect.collidepoint(pos):
                     nomeMondo="FileTXT/Mondo3.txt"
                     nomeSalvataggio="FileTXT/salvataggio3.txt"
-                    fase=5
-                    Diff=0     
+                    dati=CreaMondo(nomeMondo,nomeSalvataggio,1)
 
-    elif fase==3:
-        nFoglie=dati[0]
-        nLegno=dati[1]
-        nPietra=dati[2]
-        nErba=dati[3]
-        nTerra=dati[4]
-        posMondox=dati[5]
-        posMondoy=dati[6]
-        posPlayer=(dati[7],dati[8])
-        vitaTot=dati[9]
-        tempo=dati[10]
-        nOakPlanks=dati[11]
-        nScale=dati[12]
-        nSaplings=dati[13]
-        nDay=dati[14]
-        nDay1=dati[15]
-        if Diff==None:
-            Diff=dati[16]
-        if dati[17]==0:
-            Sfondo.notte=True
-        else:
-            Sfondo.notte=False
-        Mondo.blocchi=[]
-        Mondo.blocchiAria=[]
-        Mondo.blocchiDietro=[]
-        Mondo.scale=[]
-        player=Personaggio(screen, posPlayer,(45,90))
-        fase=2
-        regen=0
+                if Reset3S.rect.collidepoint(pos):
+                    nomeMondo="FileTXT/Mondo3.txt"
+                    nomeSalvataggio="FileTXT/salvataggio3.txt"
+                    dati=CreaMondo(nomeMondo,nomeSalvataggio,0)
 
-        pygame.mixer.music.fadeout(1000)
-        pygame.mixer.music.load(random.choice(Soundtrack))
-        pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play(0,1)
-
-    elif fase==5:
-        screen.blit(sfondoMenu,sfondorect)
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == MOUSEBUTTONDOWN and event.button==1:
-                pos=pygame.mouse.get_pos()
-                if MondoSize.rect.collidepoint(pos):
-                    if MondoSize.testo=="Piccola":
-                        MondoSize.testo="Grande"
-                        tipo=2
-                    else:
-                        MondoSize.testo="Piccola"
-                        tipo=1
-                if Difficulty.rect.collidepoint(pos):
-                    if Difficulty.testo=="Pacifica":
-                        Difficulty.testo="Facile"
-                        Diff=1
-                    elif Difficulty.testo=="Facile":
-                        Difficulty.testo="Normale"
-                        Diff=2
-                    elif Difficulty.testo=="Normale":
-                        Difficulty.testo="Difficile"
-                        Diff=3
-                    else:
-                        Difficulty.testo="Pacifica"
-                        Diff=0
                 
-                if CreaMondoTasto.rect.collidepoint(pos):
-                    CreaMondo(nomeMondo,nomeSalvataggio,tipo)
-                    fase=1
 
-        MondoSize.draw()
-        Difficulty.draw()
-        CreaMondoTasto.draw()
-        MondoSizeScritta.drawNormal("Dimensione Mondo: ",50)
-        DifficultyScritta.drawNormal("Difficoltà: ",50)
-        
+        if fase==3:
+            nFoglie=dati[0]
+            nLegno=dati[1]
+            nPietra=dati[2]
+            nErba=dati[3]
+            nTerra=dati[4]
+            posMondox=dati[5]
+            posMondoy=dati[6]
+            posPlayer=(dati[7],dati[8])
+            vitaTot=dati[9]
+            tempo=dati[10]
+            nOakPlanks=dati[11]
+            nScale=dati[12]
+            nSaplings=dati[13]
+            nDay=dati[14]
+            nDay1=dati[15]
+            Mondo.blocchi=[]
+            Mondo.blocchiAria=[]
+            Mondo.blocchiDietro=[]
+            Mondo.scale=[]
+            player=Personaggio(screen, posPlayer,(45,90))
+            fase=2
+            regen=0
 
-
-
+            pygame.mixer.music.fadeout(1000)
+            pygame.mixer.music.load(random.choice(Soundtrack))
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(0,1)
 
     elif fase==4:
-
         screen.blit(YouDied,sfondorect)
         disegnaYouDied()
         for event in pygame.event.get():
@@ -605,13 +571,7 @@ while True:
                     dati.append(nSaplings)
                     dati.append(nDay)
                     dati.append(nDay1)
-                    dati.append(Diff)
-                    if Sfondo.notte==True:
-                        dati.append(0)
-                    else:
-                        dati.append(1)
                     SalvaDati(dati,nomeSalvataggio,nomeMondo)
-                    Diff=None
 
                     pygame.mixer.music.fadeout(1000)
                     pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
@@ -639,15 +599,9 @@ while True:
             dati.append(nSaplings)
             dati.append(nDay)
             dati.append(nDay1)
-            dati.append(Diff)
-            if Sfondo.notte==True:
-                dati.append(0)
-            else:
-                dati.append(1)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
             Fantasma=[]
             fantasmaPres=0
-            Diff=None
 
             pygame.mixer.music.fadeout(1000)
             pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
@@ -678,12 +632,6 @@ while True:
 
 
     elif fase==2:
-        if Diff==1:
-            FantasmaSpeed=1
-        elif Diff==2:
-            FantasmaSpeed=2
-        elif Diff==3:
-            FantasmaSpeed=3
         if pygame.mixer.music.get_busy()==False:
             pygame.mixer.music.unload()
             pygame.mixer.music.load(random.choice(Soundtrack))
@@ -753,7 +701,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="T" and nTerra<999:
                                     nTerra+=1
-                                    TerraSuono.play()
+                                    choice = random.choice(TerraSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="P" and nPietra<999:
                                     nPietra+=1
@@ -762,7 +711,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="F" and nFoglie<999:
                                     nFoglie+=1
-                                    FoglieSuono.play()
+                                    choice = random.choice(FoglieSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="L" and nLegno<999:
                                     nLegno+=1
@@ -786,7 +736,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="t" and nTerra<999:
                                     nTerra+=1
-                                    TerraSuono.play()
+                                    choice = random.choice(TerraSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="p" and nPietra<999:
                                     nPietra+=1
@@ -795,7 +746,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="f" and nFoglie<999:
                                     nFoglie+=1
-                                    FoglieSuono.play()
+                                    choice = random.choice(FoglieSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="l" and nLegno<999:
                                     nLegno+=1
@@ -814,7 +766,8 @@ while True:
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
                                 elif blocco[2]=="S" and nSaplings<999:
                                     nSaplings+=1
-                                    FoglieSuono.play()
+                                    choice = random.choice(FoglieSuono)
+                                    choice.play()
                                     Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
 
             if event.type == MOUSEBUTTONDOWN and event.button==3:
@@ -825,7 +778,8 @@ while True:
                         if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
                             if lum==1 and nFoglie>0:
                                 nFoglie-=1
-                                FoglieSuono.play()
+                                choice = random.choice(FoglieSuono)
+                                choice.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==2 and nLegno>0:
                                 nLegno-=1
@@ -844,7 +798,8 @@ while True:
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==5 and nTerra>0:
                                 nTerra-=1
-                                TerraSuono.play()
+                                choice = random.choice(TerraSuono)
+                                choice.play()
                                 Mondo.AggiungiBlocco(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==6 and nOakPlanks>0:
                                 nOakPlanks-=1
@@ -860,7 +815,8 @@ while True:
                         if sqrt((rectTmp.centerx-player.rect.centerx)**2+(rectTmp.centery-player.rect.centery)**2)<=250:
                             if lum==1 and nFoglie>0:
                                 nFoglie-=1
-                                FoglieSuono.play()
+                                choice = random.choice(FoglieSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==2 and nLegno>0:
                                 nLegno-=1
@@ -879,7 +835,8 @@ while True:
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==5 and nTerra>0:
                                 nTerra-=1
-                                TerraSuono.play()
+                                choice = random.choice(TerraSuono)
+                                choice.play()
                                 Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
                             elif lum==6 and nOakPlanks>0:
                                 nOakPlanks-=1
@@ -895,7 +852,8 @@ while True:
                                 for blocco in Mondo.blocchi:
                                     if blocco==(bloccoAria[0],bloccoAria[1]+50,"E") or blocco==(bloccoAria[0],bloccoAria[1]+50,"T"):
                                         nSaplings-=1
-                                        FoglieSuono.play()
+                                        choice = random.choice(FoglieSuono)
+                                        choice.play()
                                         Mondo.AggiungiBloccoDietro(posMondox,posMondoy,(bloccoAria),lum)
 
             if event.type==pygame.KEYDOWN:
@@ -996,13 +954,7 @@ while True:
             dati.append(nSaplings)
             dati.append(nDay)
             dati.append(nDay1)
-            dati.append(Diff)
-            if Sfondo.notte==True:
-                dati.append(0)
-            else:
-                dati.append(1)
             SalvaDati(dati,nomeSalvataggio,nomeMondo)
-            Diff=None
 
             pygame.mixer.music.fadeout(1000)
             pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
@@ -1038,7 +990,7 @@ while True:
             dannoSuono.play()
 
         if Sfondo.notte==True and fantasmaLim>fantasmaPres:
-            Fantasma.append(fantasmaSpawn(FantasmaSpeed))
+            Fantasma.append(fantasmaSpawn())
             #aggiungi audio fantasma
             fantasmaPres+=1
 
@@ -1107,7 +1059,6 @@ while True:
             PosYMF3.drawNormal(str(round(posMondoy)))
             PosXPF3.drawNormal(str(round(player.rect.left)))
             PosYPF3.drawNormal(str(round(player.rect.bottom)))
-            DiffF3.drawNormal(str(Diff))
 
         player.muovi()
         player.draw()
@@ -1116,8 +1067,6 @@ while True:
             fantasmaLim=int(round(nDay/2))
         elif Sfondo.notte==False and nDay1==nDay:
             nDay=nDay1+1
-        if Sfondo.notte==True:
-            fantasmaLim=int(round(nDay/2))
         
         if tempo%7==0 and cooldown<7:
             cooldown+=1
@@ -1141,6 +1090,8 @@ while True:
         elif lum==9:
             box9.draw(9,"",True,cooldown)
         
-        tempo+=1
+        
+        
+    tempo+=1
     pygame.display.update()
     clock.tick(fps)
