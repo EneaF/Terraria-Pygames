@@ -1,0 +1,68 @@
+TerraCraft2D
+
+Programmato da:
+Enea Fascilla - Vincenzo Aloi 3P liceo Banfi Vimercate
+
+Istruzioni Gioco:
+Necessario un Mouse
+
+TerraCraft2D è un gioco sandbox, quindi la parte principale del gioco è la costruzione di casette, statue o 
+pixel art con i blocchi che si trovano nel mondo di gioco. Un obbiettivo da raggiungere è quello di sconfiggere il Boss Finale
+che una volta sconfitto darà la vittoria (si potrà comunque rientrare nel mondo dopo aver vinto contro il boss finale)
+
+Comandi:
+A - Muovi a sinistra
+D - Muovi a destra
+W - Sali la scala
+S - Scendi la scala
+SHIFT- Aggrappati alla scala
+SPACE - Salta
+E - Blocco dell'inventario successivo
+Q - Blocco dell'inventario precedente
+ESC - torna al menu principale (salva i progressi)
+Tasto destro - Piazza blocco selezionato (quello illuminato nella barra e solo se non è 0)
+Tasto sinistro - Rompi il blocco
+Rotella del mouse - piazza il blocco in secondo piano (può essere attraversato ed è un pò sbiadito)
+1-2-3-4-5-6-7-8-9 - seleziona slot inventario
+F3 - Apri menù informazioni
+C - Crafta blocco
+K - Inizia battaglia finale
+
+Pistola:
+lo slot 9 ha una pistola che ha un cooldown, per accorciare il cooldown bisogna trovare i minerali di ferro nel sottosuolo (12 in totale)
+per sparare selezionare lo slot 9 e cliccare con il tasto sinistro del mouse un qualsiasi punto dello schermo, il proiettile andrà in quella direzione
+
+Fantasmini:
+La notte è infestata dai fantasmini! sono presenti in tutte le difficolta eccetto la difficolta pacifica. nelle altre difficoltà saranno più
+veloci ad una difficoltà maggiore. Se ti colpiscono ti tolgono 1 cuore di vita, se li colpisci con un proiettile spariranno (ne apparirà uno nuovo al bordo
+dello schermo)
+
+Sapling:
+i sapling possono essere piazzati solo sopra ad un blocco di terra o di erba, con la rotella del mouse. I sapling cresceranno tutti insieme all'alba di ogni giorno
+il gioco potrebbe fermarsi per qualche secondo se si gioca su un dispositivo non molto performante. fare attenzione a dove si piazzano i apling, spaccano
+tutti i blocchi nella zona sostituendoli con foglie e legno.
+
+Crafting:
+per craftare basta selezionare lo slot dell'oggetto che si vuole craftare e poi premere C
+Oggetto craftato       Oggetto necessario
+4 Assi di legno 	1 Blocco di legno
+1 Scaletta		2 Assi di legno
+1 Sapling		1-5 Foglie di quercia (valore random può variare)
+
+Morte:
+se muori apparirà il menu "You Died" premere Respawn per rinascere nel punto di spawn iniziale del mondo (Spero che non lo hai coperto) oppure premere
+"Title Screen" per tornare al menu, la prossima volta che si accede al mondo si inizierà con la schermata "You Died"
+Quando respawni perderai la metà di tutti i tuoi blocchi (eccetto Ferro e Diamanti che sono a parte)
+
+Boss Finale:
+La battaglia finale sarà disponibile solo dopo aver preso tutti i 5 diamanti del mondo, (non è necessario aver preso i 12 pezzi di ferro)
+Per iniziare la battaglia iniziale premere K
+Il Boss Finale ha due fasi divise da una fase di "carica" del Boss (quando arriva a metà vita)
+se si muore durante la battaglia è fondamentale premere Respawn altrimenti si rischia di perdere definitivamente il salvataggio (si perderanno la metà
+dei blocchi al Respawn)
+La battaglia finale non sarà conclusa fino a quando il boss non sarà sconfitto quindi bisogna scegliere bene se tentare o no.
+
+Sono disponibili due mappe diverse: una mappa grande e una mappa piccola
+I suoni sono disponibili quindi Alza Sto Volume!
+
+BUON DIVERTIMENTO!

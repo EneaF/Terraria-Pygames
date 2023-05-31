@@ -1470,10 +1470,31 @@ while True:
         elif lum==9:
             box9.draw(9,"",True,cooldown)
         
-        
+# A sto punto tanto vale arrivare a 1500 righe di codice!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
         tempo+=1
     pygame.display.update()
     clock.tick(fps)
+#Siuuummmmmm
