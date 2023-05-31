@@ -12,6 +12,8 @@ from HP import VitaClass
 from Sfondo import SfondoClass
 from fantasma import FantasmaClass
 from proiettile import ProiettileClass
+from BossFinale import Bossfinale
+from Tormenelli import TormenelliClass
 
 
 pygame.init()
@@ -46,6 +48,8 @@ Difficulty=RiqScritto(screen,(500,350),sizeCreaMondi, "Pacifica")
 MondoSizeScritta=RiqScritto(screen, (150,230),sizeCreaMondi, "")
 DifficultyScritta=RiqScritto(screen, (150,380),sizeCreaMondi, "")
 CreaMondoTasto=RiqScritto(screen, (300,575), (400,100), "Crea Mondo")
+
+HaiVinto=RiqScritto(screen,(400,300),(200,100),"HAI VINTO!")
 
 QUITButton=RiqScritto(screen, (400,575), (200,100), "QUIT")
 
@@ -88,6 +92,9 @@ box6=Inventario((600,25), sizeInventario, screen)
 box7=Inventario((660,25), sizeInventario, screen)
 box8=Inventario((720,25), sizeInventario, screen)
 box9=Inventario((780,25), sizeInventario, screen)
+
+
+
 
 
 
@@ -308,14 +315,15 @@ def CreaMondo(nomeMondo,saveFile,tipo):
     f.close()
     f1.close()
 
-def SalvaDati(dati,saveFile,nomeMondo):
-    f=open("fileTXT/Mondo.txt","r+")
-    f1=open(nomeMondo,"w")
-    f1.truncate()
-    for riga in f:
-        f1.write(riga)
-    f.close()
-    f1.close()
+def SalvaDati(dati,saveFile,nomeMondo,tipo=0):
+    if tipo==0:
+        f=open("fileTXT/Mondo.txt","r+")
+        f1=open(nomeMondo,"w")
+        f1.truncate()
+        for riga in f:
+            f1.write(riga)
+        f.close()
+        f1.close()
 
     f=open(saveFile,"w")
     f.truncate()
@@ -466,7 +474,13 @@ YouDiedSuono=pygame.mixer.Sound("Sounds/YouDiedSound.mp3")
 SparoSuono=pygame.mixer.Sound("Sounds/Gunshot.mp3")
 FantasmaSuono=pygame.mixer.Sound("Sounds/Ghostdeath.mp3")
 Fantasmarisata=pygame.mixer.Sound("Sounds/Ghostlaugh.mp3")
+BossCharging=pygame.mixer.Sound("Sounds/BossCharging.mp3")
+BossHit=pygame.mixer.Sound("Sounds/BossHit.mp3")
+BossHitGround=pygame.mixer.Sound("Sounds/BossHitGround.mp3")
+BossTormenelli=pygame.mixer.Sound("Sounds/BossSpawnTormenini.mp3")
+YouWin=pygame.mixer.Sound("Sounds/YouWinSound.mp3")
 SparoSuono.set_volume(0.1)
+BossHitGround.set_volume(0.3)
 
 lum=0
 fase=1
@@ -482,6 +496,10 @@ ProPres=0
 tipo=1
 Diff=None
 FantasmaSpeed=1
+BossFight=False
+faseFight=1
+invincibilità=False
+CooldInv=0
 while True:
     if fase==1:
         
@@ -630,8 +648,11 @@ while True:
                     nPietra=round(nPietra/2)
                     posMondox=-550
                     posMondoy=-200
-                    player.rect.left=500
-                    player.rect.top=350
+                    if BossFight==True:
+                        faseFight=2
+                    else:
+                        player.rect.left=500
+                        player.rect.top=350
                     vitaTot=10
                     fase=2
                     pygame.mixer.music.fadeout(1000)
@@ -1050,6 +1071,9 @@ while True:
         if keys[K_9]:
             lum=9
             cooldown=0
+        
+        if keys[K_k]==True and nDiamante==5:
+            BossFight=True
 
         if keys[K_ESCAPE]:
             fase=1
@@ -1086,15 +1110,213 @@ while True:
             pygame.mixer.music.play(-1,1)
             Fantasma=[]
             fantasmaPres=0
-
         
+
+        if BossFight==True:
+            Sfondo.drawBoss()
+            if player.rect.right>=946:
+                player.rect.right=945
+                player.StopSinistra()
+            if player.rect.left<=54:
+                player.rect.left=55
+                player.StopDestra()
+            if faseFight==1:
+                f=open("fileTXT/Mondo.txt","r+")
+                f1=open(nomeMondo,"w")
+                f1.truncate()
+                for riga in f:
+                    f1.write(riga)
+                f.close()
+                f1.close()
+                faseFight=2
+
+            if faseFight==2:
+                Boss=Bossfinale((400,450),(200,200),screen)
+                pygame.mixer.music.fadeout(1000)
+                pygame.mixer.music.load("Sounds/MainTheme/FinalBoss.mp3")
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play(-1,1)
+                Fantasma=[]
+                fantasmaPres=0
+                Mondo.blocchi=[]
+                Mondo.blocchiAria=[]
+                Mondo.blocchiDietro=[]
+                Mondo.scale=[]
+
+                CaricaMondo("fileTXT/BossRoomBase.txt",nomeSalvataggio)
+                posMondox=-50
+                posMondoy=-50
+                player.rect.top=400
+                player.rect.left=200
+                faseFight=2.5
+                tempoCarica=0
+                CaricaFase=0
+            elif faseFight==2.5:
+                if tempoCarica%3==0:
+                    CaricaFase+=1
+                tempoCarica+=1
+                if CaricaFase>=10:
+                    faseFight=3
+                    tempoCarica=0
+                    Prec=False
+            elif faseFight==3:
+                azione=random.randint(0,20)
+                if azione==1:
+                    Boss.Jump()
+                    Boss.inAria=True
+                    Prec=True
+                if Boss.inAria==False and Prec==True:
+                    BossHitGround.play()
+                    Prec=False
+
+                Boss.CheckMuovi()
+                Boss.muovi()
+                for blocco in Mondo.blocchi:
+                    if Boss.rect.collidepoint((blocco[0],blocco[1])) and blocco[2]!="B":
+                        Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                for blocco in Mondo.blocchiDietro:
+                    if Boss.rect.collidepoint((blocco[0],blocco[1])):
+                        Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                if Boss.rect.collidepoint(player.rect.center):
+                    danno+=1
+                    invincibilità=True
+                if ProPres>0:
+                    i=0
+                    for proiettile in Proiettile:
+                        if Boss.rect.collidepoint(proiettile.rect.center):
+                            Boss.HP-=5
+                            Proiettile.pop(i)
+                            BossHit.play()
+                    i+=1
+                if Boss.HP<=100:
+                    faseFight=4
+                    CaricaFase=0
+                    tempoCarica=0
+                    BossCharging.play()
+                    danno-=4
+            elif faseFight==4:
+                
+                Boss.image=Boss.upgradeBoss
+                Boss.rect.top=450
+                Boss.rect.left=400
+                if tempoCarica%20==0:
+                    CaricaFase+=1
+                tempoCarica+=1
+                if Boss.rect.collidepoint(player.rect.center):
+                    danno+=1
+                    invincibilità=True
+                if CaricaFase>=10:
+                    faseFight=5
+                    tempoCarica=0
+                    Tormenelli=[]
+                    TormenelliPres=False
+                    Prec=False
+            elif faseFight==5:
+                Boss.image=Boss.fase2
+                azione=random.randint(0,20)
+                if azione==1:
+                    Boss.Jump()
+                    Prec=True
+                    Boss.inAria=True
+                if Boss.inAria==False and Prec==True:
+                    BossHitGround.play()
+                    Prec=False
+                if azione==2:
+                    TormenelliPres=True
+                    BossTormenelli.play()
+                    for i in range(0,8):
+                        Tormenelli.append(TormenelliClass((Boss.rect.centerx,Boss.rect.centery-50),(30,30),screen,i))
+                Boss.CheckMuovi()
+                Boss.muovi()
+                for blocco in Mondo.blocchi:
+                    if Boss.rect.collidepoint((blocco[0],blocco[1])) and blocco[2]!="B":
+                        Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                for blocco in Mondo.blocchiDietro:
+                    if Boss.rect.collidepoint((blocco[0],blocco[1])):
+                        Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
+                if Boss.rect.collidepoint(player.rect.center):
+                    danno+=1
+                    invincibilità=True
+                if ProPres>0:
+                    i=0
+                    for proiettile in Proiettile:
+                        if Boss.rect.collidepoint(proiettile.rect.center):
+                            Boss.HP-=5
+                            Proiettile.pop(i)
+                            BossHit.play()
+                    i+=1
+                if TormenelliPres==True:
+                    i=0
+                    for tormenello in Tormenelli:
+                        if player.rect.collidepoint(tormenello.rect.center):
+                            danno+=1
+                            invincibilità=True
+                            Tormenelli.pop(i)
+                        if tormenello.rect.centerx>1000 or tormenello.rect.centerx<0 or tormenello.rect.centery>700 or tormenello.rect.centery<0:
+                            Tormenelli.pop(i)
+                        tormenello.muovi()
+                        tormenello.draw()
+                        i+=1
+                if Boss.HP<=0:
+                    faseFight=6
+                    CaricaFase=0
+                    tempoCarica=0
+                    pygame.mixer.music.fadeout(1000)
+                    YouWin.play()
+            elif faseFight==6:
+                HaiVinto.draw()
+                if tempoCarica%20==0:
+                    CaricaFase+=1
+                tempoCarica+=1
+                if CaricaFase>=10:
+                    faseFight=7
+                    tempoCarica=0
+            elif faseFight==7:
+                fase=1
+                BossFight=False
+                FaseFight=1
+                dati=[]
+                dati.append(nFoglie)
+                dati.append(nLegno)
+                dati.append(nPietra)
+                dati.append(nErba)
+                dati.append(nTerra)
+                dati.append(posMondox)
+                dati.append(posMondoy)
+                dati.append(500)
+                dati.append(350)
+                dati.append(vitaTot)
+                dati.append(tempo)
+                dati.append(nOakPlanks)
+                dati.append(nScale)
+                dati.append(nSaplings)
+                dati.append(nDay)
+                dati.append(nDay1)
+                dati.append(0)
+                dati.append(1)
+                dati.append(nDiamante)
+                dati.append(nFerro)
+                SalvaDati(dati,nomeSalvataggio,nomeMondo,1)
+                Fantasma=[]
+                fantasmaPres=0
+                Diff=None
+
+                pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play(-1,1)
+
+                
+
+            if faseFight!=7:  
+                Boss.draw()
         
         collisioneBlocchiLati(player, Mondo)
-        posMondoy=scorriMondoAlto(player, Mondo, posMondoy)
-        posMondox=scorriMondolati(player,Mondo,posMondox)
-        if tempo>=100 and tempo<=200 and Sfondo.notte==False:
-            CresceSapling(Mondo,posMondox,posMondoy)
-        tempo*=Sfondo.draw(tempo,posMondoy)
+        if BossFight==False:
+            posMondoy=scorriMondoAlto(player, Mondo, posMondoy)
+            posMondox=scorriMondolati(player,Mondo,posMondox)
+            if tempo>=100 and tempo<=200 and Sfondo.notte==False:
+                CresceSapling(Mondo,posMondox,posMondoy)
+            tempo*=Sfondo.draw(tempo,posMondoy)
         
         Mondo.draw(posMondox,posMondoy)
         box1.draw(1,nFoglie)
@@ -1106,38 +1328,41 @@ while True:
         box7.draw(7,nScale)
         box8.draw(8,nSaplings)
         box9.draw(9,"")
+        if BossFight:
+            Boss.drawHP()
 
+        
         player.calcolaVelMax()
         if caduto==True and player.velMax>=11.8:
             danno+=dannoDaCaduta(player)
             player.velMax=0
             dannoSuono.play()
+        if BossFight==False:
+            if Sfondo.notte==True and fantasmaLim>fantasmaPres:
+                Fantasma.append(fantasmaSpawn(FantasmaSpeed))
+                #aggiungi audio fantasma
+                fantasmaPres+=1
+        if BossFight==False:
+            if fantasmaPres>0:
+                i=0
+                for entita in Fantasma:
+                    
+                    fantasmaMove(entita,player)
+                    entita.draw()
+                    if player.rect.collidepoint(entita.rect.topleft) or player.rect.collidepoint(entita.rect.bottomleft) or player.rect.collidepoint(entita.rect.topright) or player.rect.collidepoint(entita.rect.bottomright):
+                        danno+=2
+                        dannoSuono.play()
+                        Fantasmarisata.play()
+                        fantasmaPres-=1
+                        Fantasma.pop(i)
+                    if ProPres>0:
+                        for proiettile in Proiettile:
+                            if entita.rect.collidepoint(proiettile.rect.center):
+                                fantasmaPres-=1
+                                FantasmaSuono.play()
+                                Fantasma.pop(i)
 
-        if Sfondo.notte==True and fantasmaLim>fantasmaPres:
-            Fantasma.append(fantasmaSpawn(FantasmaSpeed))
-            #aggiungi audio fantasma
-            fantasmaPres+=1
-
-        if fantasmaPres>0:
-            i=0
-            for entita in Fantasma:
-                
-                fantasmaMove(entita,player)
-                entita.draw()
-                if player.rect.collidepoint(entita.rect.topleft) or player.rect.collidepoint(entita.rect.bottomleft) or player.rect.collidepoint(entita.rect.topright) or player.rect.collidepoint(entita.rect.bottomright):
-                    danno+=2
-                    dannoSuono.play()
-                    Fantasmarisata.play()
-                    fantasmaPres-=1
-                    Fantasma.pop(i)
-                if ProPres>0:
-                    for proiettile in Proiettile:
-                        if entita.rect.collidepoint(proiettile.rect.center):
-                            fantasmaPres-=1
-                            FantasmaSuono.play()
-                            Fantasma.pop(i)
-
-                i=i+1
+                    i=i+1
 
         if regen >= 300 and vitaTot < 10:
             vitaTot+=1
@@ -1150,8 +1375,17 @@ while True:
             pygame.mixer.music.load("Sounds/MainTheme/YouDiedMusic.mp3")
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(-1)
-
-        vitaTot-=danno
+        if invincibilità:
+            if CooldInv==0:
+                vitaTot-=danno
+                dannoSuono.play()
+            if CooldInv<10:
+                CooldInv+=1
+            else:
+                invincibilità=False
+                CooldInv=0
+        else:
+            vitaTot-=danno
         if vitaTot<0:
             vitaTot=0
         vitaTmp=vitaTot
@@ -1194,13 +1428,14 @@ while True:
 
         player.muovi()
         player.draw()
-        if Sfondo.notte==True and nDay1<nDay:
-            nDay1=nDay
-            fantasmaLim=int(round(nDay/2))
-        elif Sfondo.notte==False and nDay1==nDay:
-            nDay=nDay1+1
-        if Sfondo.notte==True:
-            fantasmaLim=int(round(nDay/2))
+        if BossFight==False:
+            if Sfondo.notte==True and nDay1<nDay:
+                nDay1=nDay
+                fantasmaLim=int(round(nDay/2))
+            elif Sfondo.notte==False and nDay1==nDay:
+                nDay=nDay1+1
+            if Sfondo.notte==True:
+                fantasmaLim=int(round(nDay/2))
         
         if nFerro<3:
             CoolDownTime=9
@@ -1235,6 +1470,10 @@ while True:
         elif lum==9:
             box9.draw(9,"",True,cooldown)
         
+        
+
+
+
         tempo+=1
     pygame.display.update()
     clock.tick(fps)

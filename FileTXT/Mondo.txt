@@ -1,32 +1,14 @@
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A B
-B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A F F F A A A A A A B
-B A A A F F F A A A A A A A A A A A A A A A F F F A A A A A A A A A A A A A A A A A A A A A A A A A A A F F F A A A A A A B
-B A A A F F F A A A A A A A A A A A A A A A F F F A A A A A A A A A A A A A A A A A A A A A A A A A A F F F F F A A A A A B
-B A A F F F F F A A A A A A A A A A A A A F F F F F A A A A A A A A A A A A A A A A A A A A A A A A A F F L F F A A A A A B
-B A A F F L F F A A A A A A A A A A A A A F F L F F A A A A A A A A A A A A A A A A A A A A A A A A A A A L A A A A A A A B
-B A A A A L A A A A A A A A A A A A A A A A A L A A A A A A A A A A A A A A A A E E E E A A A A A A A A A L A A A A A A A B
-B A A A A L A A A A E E E E E E E A A A A A A L A A A A A A A A A A A A A A E E T T T T E E A A A A A A A L A A A A A A A B
-B E E E E E E E E E T T T T T T T E E E E E E E E E E E E E E E E E E E E E T T T P P T T T E E E E E E E E E E E E E E E B
-B T T T T T T T T T T T T P P T T T T T T T T T T T T T T T T T T T T T T T T T P P P P T T T T T T T T T T T T T T T T T B
-B P P P P P P I P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P I D P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P I P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P D P P D P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P I P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P D P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P I P P P P P P P P I P P P P P I P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P I P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P P P P P P P P D P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P I P P P P P P P P P P P P P P P P P P P P P I P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P I P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B P P P P P P P P P P P I P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P P B
-B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B
+B B B B B B B B B B B B B B B B B B B B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B B B B B B B B B B B B B B B B B B B B

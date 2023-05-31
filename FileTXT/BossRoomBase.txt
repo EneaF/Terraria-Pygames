@@ -1,0 +1,14 @@
+B B B B B B B B B B B B B B B B B B B B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A A A A A A A A A A A A A A A A A A B
+B A L L s L L L L L L L L s A A A A A B
+B A A A s A A A A A A A A s A A A A A B
+B A A A s A A A A A A A A s A A A A A B
+B A A A s A A A A A A A L L L L s A A B
+B L s L L L A A A A A A A A A A s A A B
+B A s A A A A A A A A A A A A A s A A B
+B A s A A A A A A A A A A A A A s A A B
+B A s A A A A A A A A A A A A A s A A B
+B B B B B B B B B B B B B B B B B B B B

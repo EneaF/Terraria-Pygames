@@ -6,6 +6,7 @@ class SfondoClass():
         self.screen=screen
         self.sizeWindow=sizeWindow
         self.size=size
+        self.rect=pygame.Rect((pos[0],pos[1]),(size[0],size[1]))
 
         self.sfondo=pygame.image.load("images/Sfondo.png")
         self.sfondo=pygame.transform.scale(self.sfondo,self.sizeWindow)
@@ -19,6 +20,8 @@ class SfondoClass():
         self.sfondo4=pygame.transform.scale(self.sfondo4,self.sizeWindow)
         self.sfondoSottoterra=pygame.image.load("images/SfondoSottoterra.jpeg")
         self.sfondoSottoterra=pygame.transform.scale(self.sfondoSottoterra,self.sizeWindow)
+        self.sfondoBoss=pygame.image.load("images/SfondoBoss.jpg")
+        self.sfondoBoss=pygame.transform.scale(self.sfondoBoss,self.sizeWindow)
 
         self.sole=pygame.image.load("images/Sole.png")
         self.luna=pygame.image.load("images/Luna.png")
@@ -27,6 +30,8 @@ class SfondoClass():
         self.image=self.sole
         self.sfondoAct=self.sfondo
 
+    def drawBoss(self):
+        self.screen.blit(self.sfondoBoss,self.rect)
     
     def draw(self,time,posMondoy):
         if posMondoy>=-800 and posMondoy<=-100:
