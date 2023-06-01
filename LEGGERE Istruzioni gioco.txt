@@ -6,6 +6,8 @@ Enea Fascilla - Vincenzo Aloi 3P liceo Banfi Vimercate
 Istruzioni Gioco:
 Necessario un Mouse
 
+Il gioco è stato programmato e testato su un Pc a 30 Fps se necessario modificare la riga 22 portando fps da 60 a 30
+
 TerraCraft2D è un gioco sandbox, quindi la parte principale del gioco è la costruzione di casette, statue o 
 pixel art con i blocchi che si trovano nel mondo di gioco. Un obbiettivo da raggiungere è quello di sconfiggere il Boss Finale
 che una volta sconfitto darà la vittoria (si potrà comunque rientrare nel mondo dopo aver vinto contro il boss finale)

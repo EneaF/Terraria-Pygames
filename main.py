@@ -18,6 +18,9 @@ from Tormenelli import TormenelliClass
 
 pygame.init()
 
+clock = pygame.time.Clock()
+fps = 60
+
 sizeWindow=(1000,700)
 screen=pygame.display.set_mode(sizeWindow)
 pygame.display.set_caption("TerraCraft2D")
@@ -78,8 +81,7 @@ vita.append(vitaTmp)
 vitaTmp=[VitaClass((240,30),(25,25),screen),0]
 vita.append(vitaTmp)
 
-clock = pygame.time.Clock()
-fps = 60
+
 
 sizeInventario=(60,60)
 
@@ -480,7 +482,7 @@ BossHitGround=pygame.mixer.Sound("Sounds/BossHitGround.mp3")
 BossTormenelli=pygame.mixer.Sound("Sounds/BossSpawnTormenini.mp3")
 YouWin=pygame.mixer.Sound("Sounds/YouWinSound.mp3")
 SparoSuono.set_volume(0.1)
-BossHitGround.set_volume(0.3)
+BossHitGround.set_volume(0.1)
 
 lum=0
 fase=1
@@ -1120,6 +1122,7 @@ while True:
             if player.rect.left<=54:
                 player.rect.left=55
                 player.StopDestra()
+
             if faseFight==1:
                 f=open("fileTXT/Mondo.txt","r+")
                 f1=open(nomeMondo,"w")
@@ -1151,6 +1154,7 @@ while True:
                 faseFight=2.5
                 tempoCarica=0
                 CaricaFase=0
+
             elif faseFight==2.5:
                 if tempoCarica%3==0:
                     CaricaFase+=1
@@ -1159,6 +1163,7 @@ while True:
                     faseFight=3
                     tempoCarica=0
                     Prec=False
+
             elif faseFight==3:
                 azione=random.randint(0,20)
                 if azione==1:
@@ -1194,8 +1199,8 @@ while True:
                     tempoCarica=0
                     BossCharging.play()
                     danno-=4
+
             elif faseFight==4:
-                
                 Boss.image=Boss.upgradeBoss
                 Boss.rect.top=450
                 Boss.rect.left=400
@@ -1211,6 +1216,7 @@ while True:
                     Tormenelli=[]
                     TormenelliPres=False
                     Prec=False
+
             elif faseFight==5:
                 Boss.image=Boss.fase2
                 azione=random.randint(0,20)
@@ -1225,9 +1231,10 @@ while True:
                     TormenelliPres=True
                     BossTormenelli.play()
                     for i in range(0,8):
-                        Tormenelli.append(TormenelliClass((Boss.rect.centerx,Boss.rect.centery-50),(30,30),screen,i))
+                        Tormenelli.append(TormenelliClass((Boss.rect.centerx,Boss.rect.centery+50),(30,30),screen,i))
                 Boss.CheckMuovi()
                 Boss.muovi()
+
                 for blocco in Mondo.blocchi:
                     if Boss.rect.collidepoint((blocco[0],blocco[1])) and blocco[2]!="B":
                         Mondo.RimuoviBlocco(posMondox,posMondoy,(blocco[0],blocco[1]))
@@ -1237,6 +1244,7 @@ while True:
                 if Boss.rect.collidepoint(player.rect.center):
                     danno+=1
                     invincibilità=True
+
                 if ProPres>0:
                     i=0
                     for proiettile in Proiettile:
@@ -1245,6 +1253,7 @@ while True:
                             Proiettile.pop(i)
                             BossHit.play()
                     i+=1
+
                 if TormenelliPres==True:
                     i=0
                     for tormenello in Tormenelli:
@@ -1257,12 +1266,14 @@ while True:
                         tormenello.muovi()
                         tormenello.draw()
                         i+=1
+
                 if Boss.HP<=0:
                     faseFight=6
                     CaricaFase=0
                     tempoCarica=0
                     pygame.mixer.music.fadeout(1000)
                     YouWin.play()
+
             elif faseFight==6:
                 HaiVinto.draw()
                 if tempoCarica%20==0:
@@ -1271,10 +1282,12 @@ while True:
                 if CaricaFase>=10:
                     faseFight=7
                     tempoCarica=0
+
             elif faseFight==7:
+                print("ciao")
                 fase=1
                 BossFight=False
-                FaseFight=1
+                faseFight=1
                 dati=[]
                 dati.append(nFoglie)
                 dati.append(nLegno)
@@ -1299,7 +1312,7 @@ while True:
                 SalvaDati(dati,nomeSalvataggio,nomeMondo,1)
                 Fantasma=[]
                 fantasmaPres=0
-                Diff=None
+                Diff=0
 
                 pygame.mixer.music.load("Sounds/MainTheme/MainMenu.mp3")
                 pygame.mixer.music.set_volume(0.5)
@@ -1307,7 +1320,7 @@ while True:
 
                 
 
-            if faseFight!=7:  
+            if faseFight!=7 or faseFight !=6:  
                 Boss.draw()
         
         collisioneBlocchiLati(player, Mondo)
@@ -1337,6 +1350,7 @@ while True:
             danno+=dannoDaCaduta(player)
             player.velMax=0
             dannoSuono.play()
+
         if BossFight==False:
             if Sfondo.notte==True and fantasmaLim>fantasmaPres:
                 Fantasma.append(fantasmaSpawn(FantasmaSpeed))
@@ -1355,6 +1369,7 @@ while True:
                         Fantasmarisata.play()
                         fantasmaPres-=1
                         Fantasma.pop(i)
+
                     if ProPres>0:
                         for proiettile in Proiettile:
                             if entita.rect.collidepoint(proiettile.rect.center):
@@ -1471,19 +1486,6 @@ while True:
             box9.draw(9,"",True,cooldown)
         
 # A sto punto tanto vale arrivare a 1500 righe di codice!
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
